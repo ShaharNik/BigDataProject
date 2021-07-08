@@ -14,5 +14,5 @@
 
 <br><br>
 
-<img src="pic1.png">
-![Screenshot](pic1.png)
+<img src="./pic1.png">
+![Alt text](/pic1.png?raw=true "Title")

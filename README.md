@@ -1,5 +1,6 @@
 # Big Data and Cloud Processing
 <div>In this project we use:</div>
+ <br>
  <ul>
 <li>Kafka</li>
  <li>Node.js</li>
@@ -9,3 +10,8 @@
  <li>Docker</li>
  <li>ML Process</li>
 </ul>
+
+
+<br><br>
+
+<img src="pic1.png">

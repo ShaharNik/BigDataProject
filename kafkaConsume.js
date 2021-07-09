@@ -7,12 +7,12 @@ const Kafka = require("node-rdkafka");
 const dataModel = require('./myMongo')
 
 // -= Socket.io =-
-const express = require('express');
-const app = express();
-const http = require('http');
-const server = http.createServer(app);
-const { Server } = require("socket.io");
-const io = new Server(server);
+// const express = require('express');
+// const app = express();
+// const http = require('http');
+// const server = http.createServer(app);
+// const { Server } = require("socket.io");
+// const io = new Server(server);
 
 const kafkaConf = {
   "group.id": "cloudkarafka-example",
@@ -60,8 +60,10 @@ consumer.on("data", function(m) {
  console.log(obj.isSpecial);
  console.log("===----====----===");
  console.log(JSON.stringify(obj));
- dataModel.CreateOrder(obj.id, obj.section, obj.type, obj.day, obj.hour, obj.isSpecial, (data)=>{io.emit('new data',data)});
+ // sendDataToDashbord = (data)=>{io.emit('new data',data)}
+ dataModel.CreateOrder(obj.id, obj.section, obj.type, obj.day, obj.hour, obj.isSpecial);
 });
+
 consumer.on("disconnected", function(arg) {
   process.exit();
 });

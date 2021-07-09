@@ -24,8 +24,8 @@ sumHelper = function (numbers) { // פונקציה שמקבלת מספרים ו�
         event.isSpecial = false;
         kafka.publish(event)
 */
-var Db = {
-    CreateOrder: function (id, section, type, day, hour, isSpecial, sendDataToDashbord) {
+var Db = {                                                          //sendDataTo Dashboard func deleted
+    CreateOrder: function (id, section, type, day, hour, isSpecial) {
         var newOrder =
         {
             id: id, section: section, type: type, day: day, hour: hour, isSpecial: isSpecial
@@ -45,7 +45,7 @@ var Db = {
         //כאן צריך להחליט מה מחזירים לצד לקוח ולהפעיל את הלוגיקה הנדרשת
         // אולי נרצה לעדכן עוד אלמנטים בדף נניח ממוצעים גרף וכו, יש לעדכן את האובייקט הנשלח
         // sendDataToDashbord = (function): (data)=>{io.emit('new data',data);
-        sendDataToDashbord({elementId:"totalSum",value:Math.random() * 1000});
+        //sendDataToDashbord({elementId:"totalSum",value:Math.random() * 1000});
        
     },
     DeleteOrder: function (info) {

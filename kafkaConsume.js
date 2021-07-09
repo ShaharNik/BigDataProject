@@ -48,18 +48,18 @@ consumer.on("ready", function(arg) {
 });
 //Recieving Data
 consumer.on("data", function(m) {
- console.log("Recieved Message: ");
- console.log(m.value.toString());
+ console.log("Recieved Message: "); 
+ console.log(m.value.toString()); 
  // id, section, type, day, hour, isSpecial, sendDataToDashbord
  const obj = JSON.parse(m.value.toString());
- console.log(obj.id);
- console.log(obj.section);
- console.log(obj.type);
- console.log(obj.day);
- console.log(obj.hour);
- console.log(obj.isSpecial);
- console.log("===----====----===");
- console.log(JSON.stringify(obj));
+//  console.log(obj.id);
+//  console.log(obj.section);
+//  console.log(obj.type);
+//  console.log(obj.day);
+//  console.log(obj.hour);
+//  console.log(obj.isSpecial);
+//  console.log("===----====----===");
+
  // sendDataToDashbord = (data)=>{io.emit('new data',data)}
  dataModel.CreateOrder(obj.id, obj.section, obj.type, obj.day, obj.hour, obj.isSpecial);
 });

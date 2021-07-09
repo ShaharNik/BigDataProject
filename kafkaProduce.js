@@ -17,11 +17,14 @@ const kafkaConf = {
 const prefix = "2j37lih9-";
 const topic = `${prefix}myTest`; // send to this topic
 const producer = new Kafka.Producer(kafkaConf);
+const myProducer = require('./simulator');
 
 const genMessage = m => new Buffer.alloc(m.length,m);
 
 producer.on("ready", function(arg) {
   console.log(`producer Ariel is ready.`);
+  console.log("Activating somulator..")
+  myProducer.GenerateData();
 });
 producer.connect();
 //publish is a name can be any name...

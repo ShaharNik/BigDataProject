@@ -33,15 +33,15 @@ app.get('/send', (req, res) => res.render('sender'));
 io.on("connection", (socket) => {
     console.log("new user connected");
     socket.on("totalWaitingCalls", (msg) => { console.log(msg.totalWaiting) });
-    socket.on("callDetails", (msg) => { console.log(msg);kafka.publish(msg) });
+    socket.on("callDetails", (msg) => { console.log(JSON.stringify(msg));
+                                        kafka.publish(msg) });
 
 });
 
 
 //------------------- kafka -----------
 /* Kafka Producer Configuration */
-const myProducer = require('./simulator');
-myProducer.GenerateData(kafka);
+
 //
 //const client1 = new kafka.KafkaClient({kafkaHost: "localhost:9092"});
 //kafkaConsumer.consumer;

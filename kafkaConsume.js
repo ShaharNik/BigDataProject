@@ -6,6 +6,14 @@ const Kafka = require("node-rdkafka");
 // -= mongo =-
 const dataModel = require('./myMongo')
 
+// -= Socket.io =-
+const express = require('express');
+const app = express();
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
+
 const kafkaConf = {
   "group.id": "cloudkarafka-example",
   "metadata.broker.list": "glider-01.srvs.cloudkafka.com:9094,glider-02.srvs.cloudkafka.com:9094,glider-03.srvs.cloudkafka.com:9094".split(","),
@@ -44,6 +52,14 @@ consumer.on("data", function(m) {
  console.log(m.value.toString());
  // id, section, type, day, hour, isSpecial, sendDataToDashbord
  const obj = JSON.parse(m.value.toString());
+ console.log(obj.id);
+ console.log(obj.section);
+ console.log(obj.type);
+ console.log(obj.day);
+ console.log(obj.hour);
+ console.log(obj.isSpecial);
+ console.log("===----====----===");
+ console.log(JSON.stringify(obj));
  dataModel.CreateOrder(obj.id, obj.section, obj.type, obj.day, obj.hour, obj.isSpecial, (data)=>{io.emit('new data',data)});
 });
 consumer.on("disconnected", function(arg) {

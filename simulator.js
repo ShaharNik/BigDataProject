@@ -11,6 +11,6 @@ module.exports.GenerateData= function (kafka)
         event.hour = "16:00";
         event.isSpecial = false;
         //kafka.publish(event)
-        socket.emit("callDetails", message); // פה נשלח מידע לאיוונט בשם של הסוקט, הטיפול בו נמצא באפ והוא מדפיס את המידע לקונסול ושולח אותו לקאפקה
+        //socket.emit("callDetails", message); // פה נשלח מידע לאיוונט בשם של הסוקט, הטיפול בו נמצא באפ והוא מדפיס את המידע לקונסול ושולח אותו לקאפקה
     }
 }

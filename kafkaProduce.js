@@ -23,7 +23,7 @@ const genMessage = m => new Buffer.alloc(m.length,m);
 
 producer.on("ready", function(arg) {
   console.log(`producer Ariel is ready.`);
-  console.log("Activating somulator..")
+  console.log("Activating simulator..")
   myProducer.GenerateData();
 });
 producer.connect();

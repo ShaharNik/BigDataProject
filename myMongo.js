@@ -25,10 +25,10 @@ sumHelper = function (numbers) { // פונקציה שמקבלת מספרים ו�
         kafka.publish(event)
 */
 var Db = {                                                          //sendDataTo Dashboard func deleted
-    CreateOrder: function (id, section, type, day, hour, isSpecial) {
+    CreateOrder: function (action, section, type, day, hour, isSpecial) {
         var newOrder =
         {
-            id: id, section: section, type: type, day: day, hour: hour, isSpecial: isSpecial
+            action: action, section: section, type: type, day: day, hour: hour, isSpecial: isSpecial
         };
         //---------choose your db here ------------------
         MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
@@ -36,7 +36,7 @@ var Db = {                                                          //sendDataTo
             var dbo = db.db("MyProjectDB");
             dbo.collection("transactions").insertOne(newOrder, function (err, res) {
                 if (err) throw err;
-                console.log("1 order inserted");
+                console.log("1 order inserted to Mongo-Atlas");
                 db.close();
             });
         });

@@ -61,7 +61,7 @@ consumer.on("data", function(m) {
 //  console.log("===----====----===");
 
  // sendDataToDashbord = (data)=>{io.emit('new data',data)}
- dataModel.CreateOrder(obj.id, obj.section, obj.type, obj.day, obj.hour, obj.isSpecial);
+ dataModel.CreateOrder(obj.action, obj.section, obj.type, obj.day, obj.hour, obj.isSpecial);
 });
 
 consumer.on("disconnected", function(arg) {

@@ -44,6 +44,7 @@ var Db = {                                                          //sendDataTo
         //---------------------------------------
         //כאן צריך להחליט מה מחזירים לצד לקוח ולהפעיל את הלוגיקה הנדרשת
         // אולי נרצה לעדכן עוד אלמנטים בדף נניח ממוצעים גרף וכו, יש לעדכן את האובייקט הנשלח
+        // כאן אשלח את המקטע שממנו יצא רכב
         // sendDataToDashbord = (function): (data)=>{io.emit('new data',data);
         //sendDataToDashbord({elementId:"totalSum",value:Math.random() * 1000});
        

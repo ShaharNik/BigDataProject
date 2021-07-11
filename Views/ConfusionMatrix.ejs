@@ -1,0 +1,126 @@
+<html>
+
+<head>
+    <!--
+        https://medium.com/@noufel.gouirhate/build-a-simple-chat-app-with-node-js-and-socket-io-ea716c093088xc
+        https://hmh.engineering/experimenting-with-apache-kafka-and-nodejs-5c0604211196
+        https://www.sitepoint.com/using-redis-node-js/
+    -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <script>
+        function initSocket() {
+            //socket is global
+            socket = io.connect();
+            alert("connected");
+        }
+
+        function sendMessage(total) {
+            socket.emit("totalWaitingCalls", { totalWaiting: total });
+        }
+    </script>
+    <script>
+        function StartListen()
+        {
+            alert("HERE");
+            var table = document.getElementById('openConversations');
+            for (var r = 1, n = table.rows.length; r < n; r++) 
+            {
+                for (var c = 1, m = table.rows[r].cells.length; c < m; c++) 
+                {
+                    table.rows[r].cells[c].innerHTML = 0;
+                }
+            }
+        }
+
+        function reportEndCall(row) 
+        {
+            var totalPredictions = 0;
+            var CurrectPredictions = 0; // The diagonal of matrix
+            for (var r = 1, n = table.rows.length; r < n; r++) 
+            {
+                for (var c = 1, m = table.rows[r].cells.length; c < m; c++) 
+                {
+                    totalPredictions += parseInt(table.rows[r].cells[c].innerHTML);
+                    if (r == c) // diagonal: predict = actual
+                    {
+                        CurrectPredictions += parseInt(table.rows[r].cells[r].innerHTML) // r = c
+                    }
+                }
+            }
+            var accuracy = CurrectPredictions / totalPredictions;
+          
+            socket.emit("callDetails", message); // פה נשלח מידע לאיוונט בשם של הסוקט, הטיפול בו נמצא באפ והוא מדפיס את המידע לקונסול ושולח אותו לקאפקה
+            deleteRow(row);
+        }
+
+        function deleteRow(row) {
+            var i = row.rowIndex;
+            document.getElementById('openConversations').deleteRow(i);
+        }
+
+
+    </script>
+</head>
+
+<body onload="initSocket()">
+    Actual Leave Section:
+    <input type="button" value="Set" onclick="sendMessage(total.value)" />
+    &nbsp;
+    <hr>
+    
+    <table id="openConversations" border="1" style="background-color: burlywood; margin-left: auto; margin-right: auto; width: 80%; height: 70px; text-align: center;">
+        <caption>Predicted Section</caption>
+        <tr>
+            <td rowspan="6" style="width: 15%;">Actual Leave Section:</td>
+            <th> </th>
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th>5</th>
+        </tr>
+        <tr>
+            <th>1</th>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <th>2</th>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <th>3</th>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <th>4</th>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <th>5</th>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+    </table>
+    <input type="button" onclick="StartListen()" value="Start Listen" style="text-align: center; " />
+</body>
+
+</html>

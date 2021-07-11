@@ -74,6 +74,7 @@ module.exports.GenerateData= async function ()
         if (Enterevents[i].action.localeCompare("EnterSection") == 0) // Choose a leaving section for cars driving in section
         {
             Enterevents[i].action = "LeaveSection";
+            // -== Here we random the actual leaving Section of vehicle ! ==-
             if (Enterevents[i].hour >= 8 && Enterevents[i].hour <= 11) // 08:00 - 11:00 -> Section 2
             {
                 Enterevents[i].section = 2; // maybe add prob of 90% instead of 100%

@@ -24,8 +24,9 @@ app.use(express.static("public"));
 // CreateOrder
 // ReadOrders
 
-app.get('/', (req, res) => res.send("<a href='/send'>Send</a> <br/><a href=''>View</a>"));
-app.get('/send', (req, res) => res.render('sender'));
+ //app.get('/', (req, res) => res.send("<a href='/send'>Send</a> <br/><a href=''>View</a>"));
+ //app.get('/send', (req, res) => res.render('Sender')); // CM instead of Sender
+ app.get('/', (req, res) => res.render('ConfusionMatrix')); // CM instead of Sender
 
 
 

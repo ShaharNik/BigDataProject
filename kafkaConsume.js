@@ -53,6 +53,7 @@ consumer.on("data", function(m) {
  // id, section, type, day, hour, isSpecial, sendDataToDashbord
  const obj = JSON.parse(m.value.toString());
 //  console.log(obj.id);
+console.log(obj.carNumber); TODO: // Why is Undefined?!
 //  console.log(obj.section);
 //  console.log(obj.type);
 //  console.log(obj.day);
@@ -61,7 +62,7 @@ consumer.on("data", function(m) {
 //  console.log("===----====----===");
 
  // sendDataToDashbord = (data)=>{io.emit('new data',data)}
- dataModel.CreateOrder(obj.action, obj.section, obj.type, obj.day, obj.hour, obj.isSpecial);
+ dataModel.CreateOrder(obj.action, obj.carNumber, obj.section, obj.type, obj.day, obj.hour, obj.isSpecial);
 });
 
 consumer.on("disconnected", function(arg) {

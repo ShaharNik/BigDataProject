@@ -19,6 +19,21 @@
         }
     </script>
     <script>
+        var table = document.getElementById('openConversations');
+        var form = document.getElementById('form');
+        form.addEventListener('startListen', function(e) 
+        {
+            alert("start listening event listener is on")
+            e.preventDefault();
+            socket.on('new car', function(predicted) // when clicking submit button we listening to new car event                         
+            {                                       // and should update the confusion matrix
+                console.log(predicted); //containd json of pred and actual sections
+                //table.rows[predicted].cells[c].innerHTML = 0;
+            });
+        });
+
+    </script>
+    <script>
         function StartListen()
         {
             alert("HERE");
@@ -32,8 +47,9 @@
             }
         }
 
-        function reportEndCall(row) 
+        function reportEndCall() 
         {
+            alert("Report and call!");
             var totalPredictions = 0;
             var CurrectPredictions = 0; // The diagonal of matrix
             for (var r = 1, n = table.rows.length; r < n; r++) 
@@ -41,7 +57,7 @@
                 for (var c = 1, m = table.rows[r].cells.length; c < m; c++) 
                 {
                     totalPredictions += parseInt(table.rows[r].cells[c].innerHTML);
-                    if (r == c) // diagonal: predict = actual
+                    if (r == c) // diagonal: predicted = actual
                     {
                         CurrectPredictions += parseInt(table.rows[r].cells[r].innerHTML) // r = c
                     }
@@ -49,8 +65,7 @@
             }
             var accuracy = CurrectPredictions / totalPredictions;
           
-            socket.emit("callDetails", message); // פה נשלח מידע לאיוונט בשם של הסוקט, הטיפול בו נמצא באפ והוא מדפיס את המידע לקונסול ושולח אותו לקאפקה
-            deleteRow(row);
+            socket.emit("accuracy", accuracy); 
         }
 
         function deleteRow(row) {
@@ -67,60 +82,62 @@
     <input type="button" value="Set" onclick="sendMessage(total.value)" />
     &nbsp;
     <hr>
-    
-    <table id="openConversations" border="1" style="background-color: burlywood; margin-left: auto; margin-right: auto; width: 80%; height: 70px; text-align: center;">
-        <caption>Predicted Section</caption>
-        <tr>
-            <td rowspan="6" style="width: 15%;">Actual Leave Section:</td>
-            <th> </th>
-            <th>1</th>
-            <th>2</th>
-            <th>3</th>
-            <th>4</th>
-            <th>5</th>
-        </tr>
-        <tr>
-            <th>1</th>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <th>2</th>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <th>3</th>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <th>4</th>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <th>5</th>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-    </table>
-    <input type="button" onclick="StartListen()" value="Start Listen" style="text-align: center; " />
+    <form id="form" action="">
+        <table id="openConversations" border="1" style="background-color: burlywood; margin-left: auto; margin-right: auto; width: 80%; height: 70px; text-align: center;">
+            <caption>Predicted Section</caption>
+            <tr>
+                <td rowspan="6" style="width: 15%;">Actual Leave Section:</td>
+                <th> </th>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+            </tr>
+            <tr>
+                <th>1</th>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <th>2</th>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <th>3</th>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <th>4</th>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <th>5</th>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+        </table>
+        <input type="button" id="startListen" value="Start Listen" style="text-align: center; " />
+        <input type="button" id="StopAndAcc" onclick="reportEndCall()" value="Show Accuracy" style="text-align: center; " />
+</form>
 </body>
 
 </html>

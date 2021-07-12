@@ -18,12 +18,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.set('view engine', 'ejs');
 app.use(express.static("public"));
 
-// MongoDB
-//const dataModel = require('./myMongo')
-// Should I use routes to perform actions to mongo?
-// CreateOrder
-// ReadOrders
-
  //app.get('/', (req, res) => res.send("<a href='/send'>Send</a> <br/><a href=''>View</a>"));
  //app.get('/send', (req, res) => res.render('Sender')); // CM instead of Sender
  app.get('/', (req, res) => res.render('ConfusionMatrix')); // CM instead of Sender
@@ -34,8 +28,12 @@ app.use(express.static("public"));
 io.on("connection", (socket) => {
     console.log("new user connected");
     socket.on("totalWaitingCalls", (msg) => { console.log(msg.totalWaiting) });
-    socket.on("callDetails", (msg) => { console.log(JSON.stringify(msg));
+    socket.on("NewEvent", (msg) => { console.log(JSON.stringify(msg));
                                         kafka.publish(msg) });
+    socket.on("new car", (predicted) => {
+        io.emit('new car', predicted)
+    })
+    socket.on("accuracy", (acc) => { console.log("The accuracy is: " + acc) });
 
 });
 

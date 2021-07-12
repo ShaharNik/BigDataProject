@@ -7,12 +7,8 @@ const Kafka = require("node-rdkafka");
 const dataModel = require('./myMongo')
 
 // -= Socket.io =-
-// const express = require('express');
-// const app = express();
-// const http = require('http');
-// const server = http.createServer(app);
-// const { Server } = require("socket.io");
-// const io = new Server(server);
+io = require("socket.io-client");
+ioClient = io.connect("http://localhost:3000");
 
 const kafkaConf = {
   "group.id": "cloudkarafka-example",
@@ -53,7 +49,7 @@ consumer.on("data", function(m) {
  // id, section, type, day, hour, isSpecial, sendDataToDashbord
  const obj = JSON.parse(m.value.toString());
 //  console.log(obj.id);
-console.log(obj.carNumber); TODO: // Why is Undefined?!
+// console.log(obj.carNum); 
 //  console.log(obj.section);
 //  console.log(obj.type);
 //  console.log(obj.day);
@@ -62,7 +58,7 @@ console.log(obj.carNumber); TODO: // Why is Undefined?!
 //  console.log("===----====----===");
 // -== Need To transmit the actual leaving Section of vehicle ! ==-
  // sendDataToDashbord = (data)=>{io.emit('new data',data)}
- dataModel.CreateOrder(obj.action, obj.carNumber, obj.section, obj.type, obj.day, obj.hour, obj.isSpecial);
+ dataModel.CreateEvent(obj.action, obj.carNum, obj.section, obj.type, obj.day, obj.hour, obj.isSpecial, (data)=>{io.emit('new car',data);});
 });
 
 consumer.on("disconnected", function(arg) {

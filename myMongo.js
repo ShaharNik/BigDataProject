@@ -24,17 +24,18 @@ sumHelper = function (numbers) { // פונקציה שמקבלת מספרים ו�
         event.isSpecial = false;
         kafka.publish(event)
 */
-var Db = {                                                          //sendDataTo Dashboard func deleted
-    CreateOrder: function (action, CarNumber, section, type, day, hour, isSpecial) {
-        var newOrder =
+var Db = {                                                          //problem here?
+    CreateEvent: function (action, carNum, section, type, day, hour, isSpecial, sendDataToDashbord) 
+    {
+        var newEvent =
         {
-            action: action, CarNumber: CarNumber, section: section, type: type, day: day, hour: hour, isSpecial: isSpecial
+            action: action, carNum: carNum, section: section, type: type, day: day, hour: hour, isSpecial: isSpecial
         };
         //---------choose your db here ------------------
         MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) throw err;
             var dbo = db.db("MyProjectDB");
-            dbo.collection("transactions").insertOne(newOrder, function (err, res) {
+            dbo.collection("transactions").insertOne(newEvent, function (err, res) {
                 if (err) throw err;
                 console.log("1 order inserted to Mongo-Atlas");
                 db.close();
@@ -45,9 +46,16 @@ var Db = {                                                          //sendDataTo
         //כאן צריך להחליט מה מחזירים לצד לקוח ולהפעיל את הלוגיקה הנדרשת
         // אולי נרצה לעדכן עוד אלמנטים בדף נניח ממוצעים גרף וכו, יש לעדכן את האובייקט הנשלח
         // כאן אשלח את המקטע שממנו יצא רכב
-        // sendDataToDashbord = (function): (data)=>{io.emit('new data',data);
-        //sendDataToDashbord({elementId:"totalSum",value:Math.random() * 1000});
-       
+        // sendDataToDashbord = (function): (data)=>{io.emit('new car',data);
+        // עד שיהיה ביגאמל מגרילים ניחושים
+        var pred = Math.floor(Math.random() * 6) + 1; // 1-5 מקטע
+        //const action = JSON.parse(action);
+        if (action == "LeaveRoad") // if the car leaved road, we send the section he actually leaved
+        {
+            sendDataToDashbord({predicted:pred,actual:section}); // נשלח ללמטריצה שלנו את מקטע החיזוי ומקטע היציאה בפועל
+        }
+        //sendDataToDashbord:(data)=>{io.emit('new car',data);}
+
     },
     DeleteOrder: function (info) {
         console.log('Delete Order: ' + info);
@@ -59,7 +67,7 @@ var Db = {                                                          //sendDataTo
         var sum=0;
         MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) throw err;
-            var dbo = db.db("MyProjectDB");
+            var dbo = db.db("MyProjectDB"); // maybe here find leaving event
             dbo.collection("transactions").find({}, { projection: { _id: 0, quantity: 1 } }).toArray(function (err, result) {
                 if (err) throw err;
                 console.log(result);

@@ -16,7 +16,7 @@ module.exports.GenerateData= async function ()
     for (let i = 0; i < 10; i++)
     {
         var event= {};
-        event.CarNumber = Math.floor(10000000 + Math.random() * 90000000); // 8 digot number
+        event.carNum = Math.floor(10000000 + Math.random() * 90000000); // 8 digot number
         event.action = "EnterRoad"; // Car can't leave if not entered...!!!
         event.section = 0;
         VehiclesOnRoadCounter++;
@@ -28,7 +28,7 @@ module.exports.GenerateData= async function ()
         Enterevents.push(event);
 
         console.log(i + " vehicle enter to road in hour: " + event.hour);
-        ioClient.emit("callDetails",  event); // פה נשלח מידע לאיוונט בשם של הסוקט, הטיפול בו נמצא באפ והוא מדפיס את המידע לקונסול ושולח אותו לקאפקה
+        ioClient.emit("NewEvent",  event); // פה נשלח מידע לאיוונט בשם של הסוקט, הטיפול בו נמצא באפ והוא מדפיס את המידע לקונסול ושולח אותו לקאפקה
         //await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * 5000) + 2000));
     }
     console.log(VehiclesOnRoadCounter + " Vehicles on road");
@@ -42,7 +42,7 @@ module.exports.GenerateData= async function ()
             var entranceHour = Enterevents[rndCar].hour;
             Enterevents[rndCar].hour = Math.round(Math.random()*24) + entranceHour; // update leave road hour
             VehiclesOnRoadCounter--;
-            ioClient.emit("callDetails",  Enterevents[rndCar]);
+            ioClient.emit("NewEvent",  Enterevents[rndCar]);
             console.log("Vehicle " + i + " Leaved Road");
         }
     }
@@ -59,7 +59,7 @@ module.exports.GenerateData= async function ()
             Enterevents[i].section = Math.floor(Math.random() * 6) + 1; // 1-5 מקטע
             var entranceHour = Enterevents[i].hour;
             Enterevents[i].hour = Math.round(Math.random()*24) + entranceHour; // update enter section hour
-            ioClient.emit("callDetails",  Enterevents[i]);
+            ioClient.emit("NewEvent",  Enterevents[i]);
             console.log("Vehicle " + i + " Entered Section: " + Enterevents[i].section);
             Enterevents[i].hour = entranceHour; // want to predict with this
         }
@@ -92,10 +92,9 @@ module.exports.GenerateData= async function ()
                 Enterevents[i].hour = Math.round(Math.random()*24) + entranceHour; // update enter section hour
             }
             console.log("Vehicle " + i + " Leaved Section: " + Enterevents[i].section);
-            ioClient.emit("callDetails",  Enterevents[i]);
+            ioClient.emit("NewEvent",  Enterevents[i]);
         }
     }
-    // add leaving events or enter another section again
-
+    //TODO:  add leaving events or enter another section again
 
 }

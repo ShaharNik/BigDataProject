@@ -28,10 +28,12 @@ app.use(express.static("public"));
 io.on("connection", (socket) => {
     console.log("new user connected");
     socket.on("totalWaitingCalls", (msg) => { console.log(msg.totalWaiting) });
-    socket.on("NewEvent", (msg) => { console.log(JSON.stringify(msg));
+    socket.on("NewEvent", (msg) => { //console.log(JSON.stringify(msg));
                                         kafka.publish(msg) });
     socket.on("new car", (predicted) => {
+        console.log("new car event arrived a app.js");
         io.emit('new car', predicted)
+        socket.emit('new car', predicted)
     })
     socket.on("accuracy", (acc) => { console.log("The accuracy is: " + acc) });
 

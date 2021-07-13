@@ -13,31 +13,39 @@
             socket = io.connect();
             alert("connected");
         }
-
         function sendMessage(total) {
             socket.emit("totalWaitingCalls", { totalWaiting: total });
         }
     </script>
     <script>
-        var table = document.getElementById('openConversations');
-        var form = document.getElementById('form');
-        form.addEventListener('startListen', function(e) 
+        function startListen()
         {
-            alert("start listening event listener is on")
-            e.preventDefault();
-            socket.on('new car', function(predicted) // when clicking submit button we listening to new car event                         
-            {                                       // and should update the confusion matrix
-                console.log(predicted); //containd json of pred and actual sections
-                //table.rows[predicted].cells[c].innerHTML = 0;
-            });
-        });
+            alert("Start Listen for Entering Cars events"); // WHY NOT REACHING HERE when clicking the button?
+            //var form = document.getElementById('form');
+            // form.addEventListener('startListen', function(e) 
+            // {
+            //     alert("start listening event listener is on") // Why Don't Reach here?!
+            //     e.preventDefault();
 
+            // });
+            var table = document.getElementById('confusionMatrixTable');
+            socket.on('new car', function(predicted) // when clicking listen button we listening to new car event                         
+            {         
+                alert(" new car event accured !");                              // and should update the confusion matrix
+                console.log(predicted); //containd json of pred and actual sections
+                const obj = JSON.parse(predicted);
+                //obj.predicted; obj.actual;
+                // predicted: {predicted:pred,actual:section}
+                // need to ++ the confusion matrix table in col: predicted, and row: actual ++
+                table.rows[obj.actual].cells[obj.predicted].innerHTML = ++parseInt(table.rows[obj.actual].cells[obj.predicted].innerHTML);
+            });
+        }
     </script>
     <script>
-        function StartListen()
+        function ResetValues()
         {
             alert("HERE");
-            var table = document.getElementById('openConversations');
+            var table = document.getElementById('confusionMatrixTable');
             for (var r = 1, n = table.rows.length; r < n; r++) 
             {
                 for (var c = 1, m = table.rows[r].cells.length; c < m; c++) 
@@ -47,9 +55,10 @@
             }
         }
 
-        function reportEndCall() 
+        function CheckAccuracy() 
         {
-            alert("Report and call!");
+            alert("Entered CheckAccuracy func");
+            var table = document.getElementById('confusionMatrixTable');
             var totalPredictions = 0;
             var CurrectPredictions = 0; // The diagonal of matrix
             for (var r = 1, n = table.rows.length; r < n; r++) 
@@ -64,13 +73,13 @@
                 }
             }
             var accuracy = CurrectPredictions / totalPredictions;
-          
-            socket.emit("accuracy", accuracy); 
+            alert("accuracy is: " + accuracy) 
+            socket.emit("accuracy", accuracy); // maybe just console log accuracy?
         }
 
         function deleteRow(row) {
             var i = row.rowIndex;
-            document.getElementById('openConversations').deleteRow(i);
+            document.getElementById('confusionMatrixTable').deleteRow(i);
         }
 
 
@@ -83,7 +92,7 @@
     &nbsp;
     <hr>
     <form id="form" action="">
-        <table id="openConversations" border="1" style="background-color: burlywood; margin-left: auto; margin-right: auto; width: 80%; height: 70px; text-align: center;">
+        <table id="confusionMatrixTable" border="1" style="background-color: burlywood; margin-left: auto; margin-right: auto; width: 80%; height: 70px; text-align: center;">
             <caption>Predicted Section</caption>
             <tr>
                 <td rowspan="6" style="width: 15%;">Actual Leave Section:</td>
@@ -135,8 +144,9 @@
                 <td>0</td>
             </tr>
         </table>
-        <input type="button" id="startListen" value="Start Listen" style="text-align: center; " />
-        <input type="button" id="StopAndAcc" onclick="reportEndCall()" value="Show Accuracy" style="text-align: center; " />
+        <button type="submit">שלח</button>
+        <input type="button" id="startListen" onclick="startListen()" value="Start Listen" style="text-align: center; " />
+        <input type="button" id="StopAndAcc" onclick="CheckAccuracy()" value="Show Accuracy" style="text-align: center; " />
 </form>
 </body>
 

@@ -7,8 +7,8 @@ const Kafka = require("node-rdkafka");
 const dataModel = require('./myMongo')
 
 // -= Socket.io =-
-io = require("socket.io-client");
-ioClient = io.connect("http://localhost:3000");
+//io = require("socket.io-client");
+//ioClient = io.connect("http://localhost:3000");
 
 const kafkaConf = {
   "group.id": "cloudkarafka-example",
@@ -57,8 +57,8 @@ consumer.on("data", function(m) {
 //  console.log(obj.isSpecial);
 //  console.log("===----====----===");
 // -== Need To transmit the actual leaving Section of vehicle ! ==-
- // sendDataToDashbord = (data)=>{io.emit('new data',data)}
- dataModel.CreateEvent(obj.action, obj.carNum, obj.section, obj.type, obj.day, obj.hour, obj.isSpecial, (data)=>{io.emit('new car',data);});
+ // sendDataToDashbord = (data)=>{io.emit('new data',data)}                                     //, (data)=>{io.emit('new car',data)}
+ dataModel.CreateEvent(obj.action, obj.carNum, obj.section, obj.type, obj.day, obj.hour, obj.isSpecial, (data)=>{ioClient.emit('new car',data)});
 });
 
 consumer.on("disconnected", function(arg) {

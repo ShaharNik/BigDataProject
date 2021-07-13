@@ -29,7 +29,7 @@ module.exports.GenerateData= async function ()
 
         console.log(i + " vehicle enter to road in hour: " + event.hour);
         ioClient.emit("NewEvent",  event); // פה נשלח מידע לאיוונט בשם של הסוקט, הטיפול בו נמצא באפ והוא מדפיס את המידע לקונסול ושולח אותו לקאפקה
-        //await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * 5000) + 2000));
+        await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * 5000) + 2000));
     }
     console.log(VehiclesOnRoadCounter + " Vehicles on road");
     for (let i = 0; i < 10; i++)
@@ -45,6 +45,7 @@ module.exports.GenerateData= async function ()
             ioClient.emit("NewEvent",  Enterevents[rndCar]);
             console.log("Vehicle " + i + " Leaved Road");
         }
+        await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * 5000) + 2000));
     }
 
     console.log(VehiclesOnRoadCounter + " Left on road, The others Leaved Road");
@@ -58,11 +59,15 @@ module.exports.GenerateData= async function ()
             Enterevents[i].action = "EnterSection";
             Enterevents[i].section = Math.floor(Math.random() * 6) + 1; // 1-5 מקטע
             var entranceHour = Enterevents[i].hour;
-            Enterevents[i].hour = Math.round(Math.random()*24) + entranceHour; // update enter section hour
+            var newHour = Math.round(Math.random()*24) + entranceHour;
+            if (newHour > 24)
+                newHour = 24;
+            Enterevents[i].hour = newHour; // update enter section hour
             ioClient.emit("NewEvent",  Enterevents[i]);
             console.log("Vehicle " + i + " Entered Section: " + Enterevents[i].section);
             Enterevents[i].hour = entranceHour; // want to predict with this
         }
+        await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * 5000) + 2000));
     }
     // All the vehicles leaved the road or entered a section
     // When vehicle enter to road, we need to predict the section he will leave.
@@ -78,21 +83,31 @@ module.exports.GenerateData= async function ()
             if (Enterevents[i].hour >= 8 && Enterevents[i].hour <= 11) // 08:00 - 11:00 -> Section 2
             {
                 Enterevents[i].section = 2; // maybe add prob of 90% instead of 100%
-                Enterevents[i].hour = Math.round(Math.random()*24) + entranceHour; // update enter section hour
+                var newHour = Math.round(Math.random()*24) + entranceHour;
+                if (newHour > 24)
+                    newHour = 24;
+                Enterevents[i].hour = newHour; // update enter section hour
 
             }
             else if (Enterevents[i].hour >= 17 && Enterevents[i].hour <= 19) // 17:00 - 19:00 -> Section 5
             {
                 Enterevents[i].section = 5; // add prob of 90%
-                Enterevents[i].hour = Math.round(Math.random()*24) + entranceHour; // update enter section hour
+                var newHour = Math.round(Math.random()*24) + entranceHour;
+                if (newHour > 24)
+                    newHour = 24;
+                Enterevents[i].hour = newHour; // update enter section hour
             }
             else
             {
                 Enterevents[i].section = Math.floor(Math.random() * 6) + 1; // 1-5 מקטע
-                Enterevents[i].hour = Math.round(Math.random()*24) + entranceHour; // update enter section hour
+                var newHour = Math.round(Math.random()*24) + entranceHour;
+                if (newHour > 24)
+                    newHour = 24;
+                Enterevents[i].hour = newHour; // update enter section hour
             }
             console.log("Vehicle " + i + " Leaved Section: " + Enterevents[i].section);
             ioClient.emit("NewEvent",  Enterevents[i]);
+            await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * 5000) + 2000));
         }
     }
     //TODO:  add leaving events or enter another section again

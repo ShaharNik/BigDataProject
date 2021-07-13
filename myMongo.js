@@ -1,6 +1,9 @@
 const MongoClient = require('mongodb').MongoClient;
 // החשבון שלי (שחר)
 const uri = "mongodb+srv://shaharnik:Sn394491@cluster0.n5r39.mongodb.net/MyProjectDB?retryWrites=true&w=majority";
+// -= Socket.io =-
+//io = require("socket.io-client");
+//ioClient = io.connect("http://localhost:3000");
 
 sumHelper = function (numbers) { // פונקציה שמקבלת מספרים וסוכמת אותם
     let total = 0;
@@ -24,7 +27,7 @@ sumHelper = function (numbers) { // פונקציה שמקבלת מספרים ו�
         event.isSpecial = false;
         kafka.publish(event)
 */
-var Db = {                                                          //problem here?
+var Db = {                                                          //, sendDataToDashbord
     CreateEvent: function (action, carNum, section, type, day, hour, isSpecial, sendDataToDashbord) 
     {
         var newEvent =
@@ -53,6 +56,7 @@ var Db = {                                                          //problem he
         if (action == "LeaveRoad") // if the car leaved road, we send the section he actually leaved
         {
             sendDataToDashbord({predicted:pred,actual:section}); // נשלח ללמטריצה שלנו את מקטע החיזוי ומקטע היציאה בפועל
+            //ioClient.emit('new car',{predicted:pred,actual:section});
         }
         //sendDataToDashbord:(data)=>{io.emit('new car',data);}
 

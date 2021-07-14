@@ -4,20 +4,20 @@ ioClient = io.connect("http://localhost:3000");
 
 module.exports.GenerateData= async function () 
 {
-    //await new Promise(resolve => setTimeout(resolve, 5000));
+    const minWait = 600;
+    const maxWait = 1500;
+    const MaxEvents = 20;
+
     var type = ['Private', 'Truck', 'Commercial']; // private , מסחרי, משאית 
-    //var action = ['EnterRoad', 'LeaveRoad', 'EnterSection', 'LeaveSection']; //כניסה לכביש, יציאה מהכביש, כניסה למקטע, יציאה ממקטע   
-    //var actionEnter = ['EnterRoad', 'EnterSection']; //כניסה לכביש, יציאה מהכביש, כניסה למקטע, יציאה ממקטע 
-    //var actionLeave = ['LeaveRoad', 'LeaveSection']; //כניסה לכביש, יציאה מהכביש, כניסה למקטע, יציאה ממקטע 
-    //var SectionsCounters = [0, 0, 0, 0, 0]; // count how many vehicles on each section
     var VehiclesOnRoadCounter = 0;
     const Enterevents = [];
-    await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * 5000) + 2000));
-    for (let i = 0; i < 10; i++)
+    await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
+    // --== Enter Cars To The Road ==---
+    for (let i = 0; i < MaxEvents; i++)
     {
         var event= {};
-        event.carNum = Math.floor(10000000 + Math.random() * 90000000); // 8 digot number
-        event.action = "EnterRoad"; // Car can't leave if not entered...!!!
+        event.carNum = Math.floor(10000000 + Math.random() * 90000000); // 8 digit number
+        event.action = "EnterRoad"; // Car can't leave if not entered..
         event.section = 0;
         VehiclesOnRoadCounter++;
         event.type = type[Math.floor(Math.random() * type.length)]; 
@@ -29,35 +29,43 @@ module.exports.GenerateData= async function ()
 
         console.log(i + " vehicle enter to road in hour: " + event.hour);
         ioClient.emit("NewEvent",  event); // פה נשלח מידע לאיוונט בשם של הסוקט, הטיפול בו נמצא באפ והוא מדפיס את המידע לקונסול ושולח אותו לקאפקה
-        await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * 5000) + 2000));
+        await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
     }
     console.log(VehiclesOnRoadCounter + " Vehicles on road");
-    for (let i = 0; i < 10; i++)
-    {
-        if (Math.random() < 0.2) // 20% probability of getting true;
-        {
-            // Generate Leave Road event, without entering any section
-            var rndCar = Math.floor(Math.random() * Enterevents.length);
-            Enterevents[rndCar].action = "LeaveRoad"; // cange action to leave road
-            var entranceHour = Enterevents[rndCar].hour;
-            Enterevents[rndCar].hour = Math.round(Math.random()*24) + entranceHour; // update leave road hour
-            VehiclesOnRoadCounter--;
-            ioClient.emit("NewEvent",  Enterevents[rndCar]);
-            console.log("Vehicle " + i + " Leaved Road");
-        }
-        await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * 5000) + 2000));
-    }
 
-    console.log(VehiclesOnRoadCounter + " Left on road, The others Leaved Road");
-    // around 20% of vehicles leaved the road.
-    // the other vehicles enter to sections
-    await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * 5000) + 2000));
+
+    // for (let i = 0; i < MaxEvents; i++)
+    // {
+    //     if (Math.random() < 0.2) // 20% probability of getting true;
+    //     {
+    //         // 0.2% to Generate Leave Road event for car without entering any section
+    //         var rndCar = Math.floor(Math.random() * Enterevents.length);
+    //         Enterevents[rndCar].action = "LeaveRoad"; // change action to leave road
+    //         var entranceHour = Enterevents[rndCar].hour;
+    //         newHour = Math.round(Math.random()*24) + entranceHour;
+    //         if (newHour > 24)
+    //             newHour = 24;
+    //         Enterevents[rndCar].hour = newHour;
+    //         VehiclesOnRoadCounter--;
+    //         ioClient.emit("NewEvent",  Enterevents[rndCar]);
+    //         console.log("Vehicle " + i + " Leaved Road");
+    //     }
+    //     await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
+    // }
+
+    // console.log(VehiclesOnRoadCounter + " Left on road, The others Leaved Road");
+    // // around 20% of vehicles leaved the road.
+    // // the other vehicles enter to sections
+    // await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
+
+
+
     for (let i = 0; i < Enterevents.length; i++) 
     {
         if (Enterevents[i].action.localeCompare("EnterRoad") == 0) // Enter the un-leaved cars into sections
         {
             Enterevents[i].action = "EnterSection";
-            Enterevents[i].section = Math.floor(Math.random() * 6) + 1; // 1-5 מקטע
+            Enterevents[i].section = Math.floor(Math.random() * 5) + 1; // 1-5 מקטע
             var entranceHour = Enterevents[i].hour;
             var newHour = Math.round(Math.random()*24) + entranceHour;
             if (newHour > 24)
@@ -67,7 +75,7 @@ module.exports.GenerateData= async function ()
             console.log("Vehicle " + i + " Entered Section: " + Enterevents[i].section);
             Enterevents[i].hour = entranceHour; // want to predict with this
         }
-        await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * 5000) + 2000));
+        await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
     }
     // All the vehicles leaved the road or entered a section
     // When vehicle enter to road, we need to predict the section he will leave.
@@ -99,7 +107,7 @@ module.exports.GenerateData= async function ()
             }
             else
             {
-                Enterevents[i].section = Math.floor(Math.random() * 6) + 1; // 1-5 מקטע
+                Enterevents[i].section = Math.floor(Math.random() * 5) + 1; // 1-5 מקטע
                 var newHour = Math.round(Math.random()*24) + entranceHour;
                 if (newHour > 24)
                     newHour = 24;
@@ -107,9 +115,20 @@ module.exports.GenerateData= async function ()
             }
             console.log("Vehicle " + i + " Leaved Section: " + Enterevents[i].section);
             ioClient.emit("NewEvent",  Enterevents[i]);
-            await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * 5000) + 2000));
+            await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
         }
     }
     //TODO:  add leaving events or enter another section again
+    for (let i=0; i < Enterevents.length; i++)
+    {
+        if (Enterevents[i].action.localeCompare("LeaveSection") == 0) // Choose a leaving section for cars driving in section
+        {
+            Enterevents[i].action = "LeaveRoad";
+            // -== Here we random the actual leaving Section of vehicle ! ==-
+            console.log("Vehicle " + i + " Leaved Road at section: " + Enterevents[i].section);
+            ioClient.emit("NewEvent",  Enterevents[i]);
+            await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
+        }
+    }
 
 }

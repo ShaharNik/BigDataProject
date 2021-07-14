@@ -18,9 +18,9 @@
         }
     </script>
     <script>
-        function startListen()
+        function startListenForEvents()
         {
-            alert("Start Listen for Entering Cars events"); // WHY NOT REACHING HERE when clicking the button?
+            //alert("Start Listen for Entering Cars events"); // WHY NOT REACHING HERE when clicking the button?
             //var form = document.getElementById('form');
             // form.addEventListener('startListen', function(e) 
             // {
@@ -31,13 +31,17 @@
             var table = document.getElementById('confusionMatrixTable');
             socket.on('new car', function(predicted) // when clicking listen button we listening to new car event                         
             {         
-                alert(" new car event accured !");                              // and should update the confusion matrix
                 console.log(predicted); //containd json of pred and actual sections
-                const obj = JSON.parse(predicted);
-                //obj.predicted; obj.actual;
-                // predicted: {predicted:pred,actual:section}
+                if (predicted.actual < 1 || predicted.predicted < 1)
+                {
+                    alert("found problem!");
+                }
+                //console.log(predicted.actual);
+                //console.log(predicted.predicted);
                 // need to ++ the confusion matrix table in col: predicted, and row: actual ++
-                table.rows[obj.actual].cells[obj.predicted].innerHTML = ++parseInt(table.rows[obj.actual].cells[obj.predicted].innerHTML);
+                var x = table.rows[predicted.actual].cells[predicted.predicted].innerHTML;
+                table.rows[predicted.actual].cells[predicted.predicted].innerHTML = ++x;
+                CheckAccuracy();
             });
         }
     </script>
@@ -50,31 +54,45 @@
             {
                 for (var c = 1, m = table.rows[r].cells.length; c < m; c++) 
                 {
-                    table.rows[r].cells[c].innerHTML = 0;
+                    table.rows[r].cells[c].innerHTML = r + " " + c;
                 }
             }
         }
 
         function CheckAccuracy() 
         {
-            alert("Entered CheckAccuracy func");
+            //alert("Entered CheckAccuracy func");
             var table = document.getElementById('confusionMatrixTable');
             var totalPredictions = 0;
             var CurrectPredictions = 0; // The diagonal of matrix
+            var accuracy = 0;
             for (var r = 1, n = table.rows.length; r < n; r++) 
             {
                 for (var c = 1, m = table.rows[r].cells.length; c < m; c++) 
                 {
                     totalPredictions += parseInt(table.rows[r].cells[c].innerHTML);
+                    console.log("totalPredictions: " + totalPredictions);
                     if (r == c) // diagonal: predicted = actual
                     {
                         CurrectPredictions += parseInt(table.rows[r].cells[r].innerHTML) // r = c
+                        console.log("CurrectPredictions: " + CurrectPredictions);
                     }
                 }
             }
-            var accuracy = CurrectPredictions / totalPredictions;
-            alert("accuracy is: " + accuracy) 
-            socket.emit("accuracy", accuracy); // maybe just console log accuracy?
+            if (totalPredictions != 0)
+            {
+                accuracy = CurrectPredictions / totalPredictions;
+                //alert("accuracy is: " + accuracy) 
+                console.log("accuracy is: " + accuracy);
+                socket.emit("accuracy", accuracy); // maybe just console log accuracy?
+            }
+            else
+            {
+                //alert("Unable to check accuracy! Check the values!")
+                //console.log("Unable to check accuracy! Check the values!");
+            }
+            const element = document.getElementById("AccuracyText");
+            element.innerHTML = "Accuracy: " + accuracy;
         }
 
         function deleteRow(row) {
@@ -87,8 +105,7 @@
 </head>
 
 <body onload="initSocket()">
-    Actual Leave Section:
-    <input type="button" value="Set" onclick="sendMessage(total.value)" />
+    <! –– <input type="button" value="Set" onclick="sendMessage(total.value)" />
     &nbsp;
     <hr>
     <form id="form" action="">
@@ -144,9 +161,9 @@
                 <td>0</td>
             </tr>
         </table>
-        <button type="submit">שלח</button>
-        <input type="button" id="startListen" onclick="startListen()" value="Start Listen" style="text-align: center; " />
-        <input type="button" id="StopAndAcc" onclick="CheckAccuracy()" value="Show Accuracy" style="text-align: center; " />
+        <h4 id="AccuracyText" style="text-align: center;">Accuracy: </h1>
+        <input type="button" id="startListen" onclick="startListenForEvents()" value="Start Listen" style="text-align: center; " />
+        <! –– <input type="button" id="StopAndAcc" onclick="CheckAccuracy()" value="Show Accuracy" style="text-align: center; " /> 
 </form>
 </body>
 

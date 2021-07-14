@@ -40,7 +40,7 @@ var Db = {                                                          //, sendData
             var dbo = db.db("MyProjectDB");
             dbo.collection("transactions").insertOne(newEvent, function (err, res) {
                 if (err) throw err;
-                console.log("1 order inserted to Mongo-Atlas");
+                //console.log("1 order inserted to Mongo-Atlas");
                 db.close();
             });
         });
@@ -51,7 +51,7 @@ var Db = {                                                          //, sendData
         // כאן אשלח את המקטע שממנו יצא רכב
         // sendDataToDashbord = (function): (data)=>{io.emit('new car',data);
         // עד שיהיה ביגאמל מגרילים ניחושים
-        var pred = Math.floor(Math.random() * 6) + 1; // 1-5 מקטע
+        var pred = Math.floor(Math.random() * 5) + 1; // 1-5 מקטע
         //const action = JSON.parse(action);
         if (action == "LeaveRoad") // if the car leaved road, we send the section he actually leaved
         {

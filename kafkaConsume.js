@@ -16,12 +16,12 @@ const kafkaConf = {
   "socket.keepalive.enable": true,
   "security.protocol": "SASL_SSL",
   "sasl.mechanisms": "SCRAM-SHA-256",
-  "sasl.username": "2j37lih9",
-  "sasl.password": "4SY0DEv9KIvpSCW9cXgkry1SCUVuPqUL",
+  "sasl.username": "f3roe3re",
+  "sasl.password": "cDkjUdvtxxv4HZJmSAKLGzz7cdW6JpPV",
   "debug": "generic,broker,security"
 };
 
-const prefix = "2j37lih9-";
+const prefix = "f3roe3re-";
 const topic = `${prefix}myTest`;
 const producer = new Kafka.Producer(kafkaConf);
 
@@ -43,9 +43,9 @@ consumer.on("ready", function(arg) {
   consumer.consume();
 });
 //Recieving Data
-consumer.on("data", function(m) {
- console.log("Recieved Message: "); 
- console.log(m.value.toString()); 
+consumer.on("data", function(m) { //WHY STOPPED REACHING HERE?
+ //console.log("Recieved Message: "); 
+ //console.log(m.value.toString()); 
  // id, section, type, day, hour, isSpecial, sendDataToDashbord
  const obj = JSON.parse(m.value.toString());
 //  console.log(obj.id);

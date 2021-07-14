@@ -9,12 +9,12 @@ const kafkaConf = {
   "socket.keepalive.enable": true,
   "security.protocol": "SASL_SSL",
   "sasl.mechanisms": "SCRAM-SHA-256",
-  "sasl.username": "2j37lih9",
-  "sasl.password": "4SY0DEv9KIvpSCW9cXgkry1SCUVuPqUL",
+  "sasl.username": "f3roe3re",
+  "sasl.password": "cDkjUdvtxxv4HZJmSAKLGzz7cdW6JpPV",
   "debug": "generic,broker,security"
 };
 
-const prefix = "2j37lih9-";
+const prefix = "f3roe3re-";
 const topic = `${prefix}myTest`; // send to this topic
 const producer = new Kafka.Producer(kafkaConf);
 const myProducer = require('./simulator');

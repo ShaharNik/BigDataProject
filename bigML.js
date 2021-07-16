@@ -5,7 +5,7 @@ var connection = new bigml.BigML('SHAHARNIK1',
                              )
                             
     var source = new bigml.Source(connection);
-    source.create('./iris.csv', function(error, sourceInfo) {
+    source.create('./transactions.csv', function(error, sourceInfo) {
       if (!error && sourceInfo) {
         var dataset = new bigml.Dataset();
         dataset.create(sourceInfo, function(error, datasetInfo) {
@@ -21,3 +21,6 @@ var connection = new bigml.BigML('SHAHARNIK1',
         });
       }
     });
+    console.log(prediction)
+
+    //module.exports = ????

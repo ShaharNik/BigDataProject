@@ -27,14 +27,13 @@ sumHelper = function (numbers) { // פונקציה שמקבלת מספרים ו�
         event.isSpecial = false;
         kafka.publish(event)
 */
-var Db = {                                                          //, sendDataToDashbord
-    CreateEvent: function (action, carNum, section, type, day, hour, isSpecial, sendDataToDashbord) 
+var Db = {                                                          
+    CreateEvent: function (action, carNum, section, predicted, type, day, hour, isSpecial, sendDataToDashbord) 
     {
         var newEvent =
         {
-            action: action, carNum: carNum, section: section, type: type, day: day, hour: hour, isSpecial: isSpecial
+            action: action, carNum: carNum, section: section, predicted: predicted, type: type, day: day, hour: hour, isSpecial: isSpecial
         };
-        //---------choose your db here ------------------
         MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) throw err;
             var dbo = db.db("MyProjectDB");
@@ -50,16 +49,40 @@ var Db = {                                                          //, sendData
         // אולי נרצה לעדכן עוד אלמנטים בדף נניח ממוצעים גרף וכו, יש לעדכן את האובייקט הנשלח
         // כאן אשלח את המקטע שממנו יצא רכב
         // sendDataToDashbord = (function): (data)=>{io.emit('new car',data);
-        // עד שיהיה ביגאמל מגרילים ניחושים
-        var pred = Math.floor(Math.random() * 5) + 1; // 1-5 מקטע
+
         //const action = JSON.parse(action);
         if (action == "LeaveRoad") // if the car leaved road, we send the section he actually leaved
         {
-            sendDataToDashbord({predicted:pred,actual:section}); // נשלח ללמטריצה שלנו את מקטע החיזוי ומקטע היציאה בפועל
-            //ioClient.emit('new car',{predicted:pred,actual:section});
+            //var EntranceEventOfCar = this.FindCarEvent(carNum); // should get The Entrance event of this specific car that leaved road.
+            //var ActuaEntranceEventOfCar.section
+            sendDataToDashbord({pred:predicted,actual:section}); // נשלח ללמטריצה שלנו את מקטע החיזוי ומקטע היציאה בפועל
         }
-        //sendDataToDashbord:(data)=>{io.emit('new car',data);}
 
+    },
+    FindCarEvent: function (carNum) {
+        MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+            if (err) throw err;
+            var dbo = db.db("MyProjectDB"); // Find The Enrance Event of specific car
+            var query = { carNum: carNum, action: "EnterRoad" };
+            dbo.collection("transactions").findOne({query}, { projection: { carNum: carNum, action: "EnterRoad", section: section } })(function (err, result) {
+                if (err) throw err;
+                console.log(result); //need return result
+                
+                db.close();
+                // var cardData = {
+                //     id:"totalSum",
+                //     title: "אריאל",
+                //     totalSum: sum,
+                //     percent: 0.8,
+                //     icon: "work"
+                // };
+                // renderTheView(cardData);
+
+            });
+        });
+       
+        //כאן צריך לחשב
+    
     },
     DeleteOrder: function (info) {
         console.log('Delete Order: ' + info);

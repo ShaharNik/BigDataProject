@@ -4,9 +4,9 @@ ioClient = io.connect("http://localhost:3000");
 
 module.exports.GenerateData= async function () 
 {
-    const minWait = 600;
-    const maxWait = 1500;
-    const MaxEvents = 20;
+    const minWait = 300;
+    const maxWait = 600;
+    const MaxEvents = 10;
 
     var type = ['Private', 'Truck', 'Commercial']; // private , מסחרי, משאית 
     var VehiclesOnRoadCounter = 0;
@@ -19,10 +19,11 @@ module.exports.GenerateData= async function ()
         event.carNum = Math.floor(10000000 + Math.random() * 90000000); // 8 digit number
         event.action = "EnterRoad"; // Car can't leave if not entered..
         event.section = 0;
+        event.prediction = 0;
         VehiclesOnRoadCounter++;
         event.type = type[Math.floor(Math.random() * type.length)]; 
         event.day = Math.floor(Math.random() * 8) + 1; // 1-7
-        event.hour = Math.round(Math.random()*24) + 1;
+        event.hour = Math.floor(Math.random()*24) + 1;
         event.isSpecial = Math.random() < 0.2; //20% probability of getting true;
 
         Enterevents.push(event);
@@ -67,7 +68,7 @@ module.exports.GenerateData= async function ()
             Enterevents[i].action = "EnterSection";
             Enterevents[i].section = Math.floor(Math.random() * 5) + 1; // 1-5 מקטע
             var entranceHour = Enterevents[i].hour;
-            var newHour = Math.round(Math.random()*24) + entranceHour;
+            var newHour = Math.floor(Math.random()*24) + entranceHour;
             if (newHour > 24)
                 newHour = 24;
             Enterevents[i].hour = newHour; // update enter section hour
@@ -80,8 +81,8 @@ module.exports.GenerateData= async function ()
     // All the vehicles leaved the road or entered a section
     // When vehicle enter to road, we need to predict the section he will leave.
     // We need to choose on which section a vehicle will leave, and give some pattern that we will predict.
-    // - Every Car enter between hour 6-8 have 90% change to leave at section 2
-    // - Every Car enter between hour 16-18 have 90% change to leave at section 5
+    // - Every Car enter between hour 6-8 have 90% chance to leave at section 2
+    // - Every Car enter between hour 16-18 have 90% chance to leave at section 5
     for (let i=0; i < Enterevents.length; i++)
     {
         if (Enterevents[i].action.localeCompare("EnterSection") == 0) // Choose a leaving section for cars driving in section
@@ -91,7 +92,7 @@ module.exports.GenerateData= async function ()
             if (Enterevents[i].hour >= 8 && Enterevents[i].hour <= 11) // 08:00 - 11:00 -> Section 2
             {
                 Enterevents[i].section = 2; // maybe add prob of 90% instead of 100%
-                var newHour = Math.round(Math.random()*24) + entranceHour;
+                var newHour = Math.floor(Math.random()*24) + entranceHour;
                 if (newHour > 24)
                     newHour = 24;
                 Enterevents[i].hour = newHour; // update enter section hour
@@ -99,8 +100,8 @@ module.exports.GenerateData= async function ()
             }
             else if (Enterevents[i].hour >= 17 && Enterevents[i].hour <= 19) // 17:00 - 19:00 -> Section 5
             {
-                Enterevents[i].section = 5; // add prob of 90%
-                var newHour = Math.round(Math.random()*24) + entranceHour;
+                Enterevents[i].section = 5; // maybe add prob of 90% instead of 100%
+                var newHour = Math.floor(Math.random()*24) + entranceHour;
                 if (newHour > 24)
                     newHour = 24;
                 Enterevents[i].hour = newHour; // update enter section hour
@@ -108,7 +109,7 @@ module.exports.GenerateData= async function ()
             else
             {
                 Enterevents[i].section = Math.floor(Math.random() * 5) + 1; // 1-5 מקטע
-                var newHour = Math.round(Math.random()*24) + entranceHour;
+                var newHour = Math.floor(Math.random()*24) + entranceHour;
                 if (newHour > 24)
                     newHour = 24;
                 Enterevents[i].hour = newHour; // update enter section hour

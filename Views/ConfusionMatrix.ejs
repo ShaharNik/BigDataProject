@@ -29,18 +29,16 @@
 
             // });
             var table = document.getElementById('confusionMatrixTable');
-            socket.on('new car', function(predicted) // when clicking listen button we listening to new car event                         
+            socket.on('new car', function(predAndActual) // when clicking listen button we listening to new car event                         
             {         
-                console.log(predicted); //containd json of pred and actual sections
-                if (predicted.actual < 1 || predicted.predicted < 1)
+                console.log(predAndActual); //containd json of pred and actual sections
+                if (predAndActual.actual < 1 || predAndActual.predicted < 1)
                 {
-                    alert("found problem!");
+                    alert("found problem! Dividing by zero");
                 }
-                //console.log(predicted.actual);
-                //console.log(predicted.predicted);
                 // need to ++ the confusion matrix table in col: predicted, and row: actual ++
-                var x = table.rows[predicted.actual].cells[predicted.predicted].innerHTML;
-                table.rows[predicted.actual].cells[predicted.predicted].innerHTML = ++x;
+                var x = table.rows[predAndActual.actual].cells[predAndActual.predicted].innerHTML;
+                table.rows[predAndActual.actual].cells[predAndActual.predicted].innerHTML = ++x;
                 CheckAccuracy();
             });
         }

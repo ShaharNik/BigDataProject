@@ -4,7 +4,8 @@ const uuid = require("uuid");
 const Kafka = require("node-rdkafka");
 
 // -= mongo =-
-const dataModel = require('./myMongo')
+const dataModel = require('./myMongo');
+const bigml = require("bigml");
 
 // -= Socket.io =-
 //io = require("socket.io-client");
@@ -56,9 +57,13 @@ consumer.on("data", function(m) { //WHY STOPPED REACHING HERE?
 //  console.log(obj.hour);
 //  console.log(obj.isSpecial);
 //  console.log("===----====----===");
-// -== Need To transmit the actual leaving Section of vehicle ! ==-
- // sendDataToDashbord = (data)=>{io.emit('new data',data)}                                     //, (data)=>{io.emit('new car',data)}
- dataModel.CreateEvent(obj.action, obj.carNum, obj.section, obj.type, obj.day, obj.hour, obj.isSpecial, (data)=>{ioClient.emit('new car',data)});
+if (obj.action == "EnterRoad")
+{
+   // obj.predicted = bigML; // NEED TO Predict the section here
+   obj.predicted = Math.floor(Math.random() * 5) + 1; // 1-5 מקטע
+}
+                                                                                               //, (data)=>{io.emit('new car',data)}
+ dataModel.CreateEvent(obj.action, obj.carNum, obj.section, obj.predicted, obj.type, obj.day, obj.hour, obj.isSpecial, (data)=>{ioClient.emit('new car',data)});
 });
 
 consumer.on("disconnected", function(arg) {

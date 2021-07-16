@@ -4,9 +4,9 @@ ioClient = io.connect("http://localhost:3000");
 
 module.exports.GenerateData= async function () 
 {
-    const minWait = 300;
-    const maxWait = 600;
-    const MaxEvents = 10;
+    const minWait = 400;
+    const maxWait = 700;
+    const MaxEvents = 5;
 
     var type = ['Private', 'Truck', 'Commercial']; // private , מסחרי, משאית 
     var VehiclesOnRoadCounter = 0;
@@ -18,7 +18,7 @@ module.exports.GenerateData= async function ()
         var event= {};
         event.carNum = Math.floor(10000000 + Math.random() * 90000000); // 8 digit number
         event.action = "EnterRoad"; // Car can't leave if not entered..
-        event.section = 0;
+        event.section = Math.floor(Math.random() * 5) + 1; // 1-5 מקטע;
         event.prediction = 0;
         VehiclesOnRoadCounter++;
         event.type = type[Math.floor(Math.random() * type.length)]; 
@@ -33,7 +33,7 @@ module.exports.GenerateData= async function ()
         await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
     }
     console.log(VehiclesOnRoadCounter + " Vehicles on road");
-
+    await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
 
     // for (let i = 0; i < MaxEvents; i++)
     // {

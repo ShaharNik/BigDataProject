@@ -20,26 +20,23 @@
     <script>
         function startListenForEvents()
         {
-            //alert("Start Listen for Entering Cars events"); // WHY NOT REACHING HERE when clicking the button?
-            //var form = document.getElementById('form');
-            // form.addEventListener('startListen', function(e) 
-            // {
-            //     alert("start listening event listener is on") // Why Don't Reach here?!
-            //     e.preventDefault();
-
-            // });
             var table = document.getElementById('confusionMatrixTable');
             socket.on('new car', function(predAndActual) // when clicking listen button we listening to new car event                         
-            {         
-                console.log(predAndActual); //containd json of pred and actual sections
-                if (predAndActual.actual < 1 || predAndActual.predicted < 1)
+            {   
+                console.log(predAndActual); // contain json of pred and actual sections
+                if (predAndActual.actual < 1 || predAndActual.prediction < 1)
                 {
-                    alert("found problem! Dividing by zero");
+                    //alert("found problem! Dividing by zero");
+                    console.log("found problem! Dividing by zero");
                 }
-                // need to ++ the confusion matrix table in col: predicted, and row: actual ++
-                var x = table.rows[predAndActual.actual].cells[predAndActual.predicted].innerHTML;
-                table.rows[predAndActual.actual].cells[predAndActual.predicted].innerHTML = ++x;
-                CheckAccuracy();
+                else
+                {
+                    // need to ++ the confusion matrix table in col: predicted, and row: actual ++
+                    //predAndActual.predicted = 1;
+                    var x = table.rows[predAndActual.actual].cells[predAndActual.prediction].innerHTML;
+                    table.rows[predAndActual.actual].cells[predAndActual.prediction].innerHTML = ++x;
+                    CheckAccuracy();
+                }
             });
         }
     </script>
@@ -87,7 +84,7 @@
             else
             {
                 //alert("Unable to check accuracy! Check the values!")
-                //console.log("Unable to check accuracy! Check the values!");
+                console.log("Unable to check accuracy! Check the values!");
             }
             const element = document.getElementById("AccuracyText");
             element.innerHTML = "Accuracy: " + accuracy;

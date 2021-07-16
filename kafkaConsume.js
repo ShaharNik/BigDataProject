@@ -44,10 +44,9 @@ consumer.on("ready", function(arg) {
   consumer.consume();
 });
 //Recieving Data
-consumer.on("data", function(m) { //WHY STOPPED REACHING HERE?
+consumer.on("data", function(m) { 
  //console.log("Recieved Message: "); 
  //console.log(m.value.toString()); 
- // id, section, type, day, hour, isSpecial, sendDataToDashbord
  const obj = JSON.parse(m.value.toString());
 //  console.log(obj.id);
 // console.log(obj.carNum); 
@@ -57,13 +56,24 @@ consumer.on("data", function(m) { //WHY STOPPED REACHING HERE?
 //  console.log(obj.hour);
 //  console.log(obj.isSpecial);
 //  console.log("===----====----===");
-if (obj.action == "EnterRoad")
+if (obj.action == "EnterRoad" || obj.action == "LeaveRoad")
 {
-   // obj.predicted = bigML; // NEED TO Predict the section here
-   obj.predicted = Math.floor(Math.random() * 5) + 1; // 1-5 מקטע
+  if (obj.action == "EnterRoad")
+  {
+    console.log("Enter Road Prediction:")
+    obj.prediction = Math.floor(Math.random() * 5) + 1; // TODO: Need predict with bigML !!
+    //Need to predict only Once for a car when enter road, and not changing it ! 
+    console.log(obj.prediction)   
+    dataModel.CreateEvent(obj.action, obj.carNum, obj.section, obj.prediction, obj.type, obj.day, obj.hour, obj.isSpecial);
+  }
+  else //obj.action == "LeaveRoad"
+  {
+    // need to find our prediction of leaved car from the car's entrance event and send it with the actual leaved section to dashboard
+    dataModel.FindCarEvent(obj.carNum, obj.section, (data)=>{ioClient.emit('new car',data)});
+  }                                                                                     
+   
 }
-                                                                                               //, (data)=>{io.emit('new car',data)}
- dataModel.CreateEvent(obj.action, obj.carNum, obj.section, obj.predicted, obj.type, obj.day, obj.hour, obj.isSpecial, (data)=>{ioClient.emit('new car',data)});
+
 });
 
 consumer.on("disconnected", function(arg) {

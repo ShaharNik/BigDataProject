@@ -28,11 +28,11 @@ sumHelper = function (numbers) { // פונקציה שמקבלת מספרים ו�
         kafka.publish(event)
 */
 var Db = {                                                          
-    CreateEvent: function (action, carNum, section, predicted, type, day, hour, isSpecial, sendDataToDashbord) 
+    CreateEvent: function (action, carNum, section, prediction, type, day, hour, isSpecial) 
     {
         var newEvent =
         {
-            action: action, carNum: carNum, section: section, predicted: predicted, type: type, day: day, hour: hour, isSpecial: isSpecial
+            action: action, carNum: carNum, section: section, prediction: prediction, type: type, day: day, hour: hour, isSpecial: isSpecial
         };
         MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) throw err;
@@ -43,46 +43,28 @@ var Db = {
                 db.close();
             });
         });
-
-        //---------------------------------------
-        //כאן צריך להחליט מה מחזירים לצד לקוח ולהפעיל את הלוגיקה הנדרשת
-        // אולי נרצה לעדכן עוד אלמנטים בדף נניח ממוצעים גרף וכו, יש לעדכן את האובייקט הנשלח
-        // כאן אשלח את המקטע שממנו יצא רכב
-        // sendDataToDashbord = (function): (data)=>{io.emit('new car',data);
-
-        //const action = JSON.parse(action);
-        if (action == "LeaveRoad") // if the car leaved road, we send the section he actually leaved
-        {
-            //var EntranceEventOfCar = this.FindCarEvent(carNum); // should get The Entrance event of this specific car that leaved road.
-            //var ActuaEntranceEventOfCar.section
-            sendDataToDashbord({pred:predicted,actual:section}); // נשלח ללמטריצה שלנו את מקטע החיזוי ומקטע היציאה בפועל
-        }
-
     },
-    FindCarEvent: function (carNum) {
+    FindCarEvent: function (carNum, LeavedSection, sendDataToDashbord) {
+        console.log("77777  REACHED HERE !! 77777777")
+        // https://docs.mongodb.com/drivers/node/usage-examples/findOne/
+        //--------======= PROBLEM HERE ============---------
         MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) throw err;
-            var dbo = db.db("MyProjectDB"); // Find The Enrance Event of specific car
-            var query = { carNum: carNum, action: "EnterRoad" };
-            dbo.collection("transactions").findOne({query}, { projection: { carNum: carNum, action: "EnterRoad", section: section } })(function (err, result) {
-                if (err) throw err;
-                console.log(result); //need return result
-                
-                db.close();
-                // var cardData = {
-                //     id:"totalSum",
-                //     title: "אריאל",
-                //     totalSum: sum,
-                //     percent: 0.8,
-                //     icon: "work"
-                // };
-                // renderTheView(cardData);
-
-            });
+            const dbo = db.db("MyProjectDB"); 
+            const query = { carNum: carNum, action: "EnterRoad" }; // Find The Entrance Event of specific car
+            const transactions = dbo.collection("transactions");
+            const options = { projection: { prediction: 1}, };
+            const result = transactions.findOne(query, options);
+            console.log(result); 
+            db.close();
         });
-       
-        //כאן צריך לחשב
-    
+       //--------======= PROBLEM HERE ============---------
+        //result.prediction; // The prediction when car entered road
+        //LeavedSection; // The actual leaving Section
+        //console.log("5555 REACHED HERE !! 555555")
+        //sendDataToDashbord({prediction: result.prediction, actual: LeavedSection}); // נשלח ללמטריצה שלנו את מקטע החיזוי ומקטע היציאה בפועל
+        // we found the entrance event of the specific car, so now we have the predicted value we predicted when the car entererd road,
+        // and the actual section when the car has leaved the road.
     },
     DeleteOrder: function (info) {
         console.log('Delete Order: ' + info);

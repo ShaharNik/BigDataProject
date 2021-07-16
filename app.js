@@ -31,7 +31,7 @@ io.on("connection", (socket) => {
     socket.on("NewEvent", (msg) => { //console.log(JSON.stringify(msg));
                                         kafka.publish(msg) });
     socket.on("new car", (predicted) => {
-        console.log("new car event arrived a app.js");
+        //console.log("new car event arrived a app.js");
         io.emit('new car', predicted)
         socket.emit('new car', predicted)
     })

@@ -41,6 +41,18 @@
         }
     </script>
     <script>
+        function trainDataInBigML() 
+        {
+            alert("Reading all data from Mongo TO CSV");
+            const trainBut = document.getElementById("trainData");
+            trainBut.disabled = true;
+            setTimeout(()=>{
+            trainBut.disabled = false;
+            }, 5000)
+            socket.emit("train data"); 
+        }
+    </script>
+    <script>
         function ResetValues()
         {
             alert("HERE");
@@ -158,6 +170,7 @@
         </table>
         <h4 id="AccuracyText" style="text-align: center;">Accuracy: </h1>
         <input type="button" id="startListen" onclick="startListenForEvents()" value="Start Listen" style="text-align: center; " />
+        <input type="button" id="trainData" onclick="trainDataInBigML()" value="Train Data" style="text-align: center; " />
         <! –– <input type="button" id="StopAndAcc" onclick="CheckAccuracy()" value="Show Accuracy" style="text-align: center; " /> 
 </form>
 </body>

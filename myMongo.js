@@ -1,9 +1,12 @@
 const MongoClient = require('mongodb').MongoClient;
 // החשבון שלי (שחר)
 const uri = "mongodb+srv://shaharnik:Sn394491@cluster0.n5r39.mongodb.net/MyProjectDB?retryWrites=true&w=majority";
+
 // -= Socket.io =-
 //io = require("socket.io-client");
 //ioClient = io.connect("http://localhost:3000");
+// --== File System ==--
+var fs = require('fs');
 
 sumHelper = function (numbers) { // פונקציה שמקבלת מספרים וסוכמת אותם
     let total = 0;
@@ -12,7 +15,7 @@ sumHelper = function (numbers) { // פונקציה שמקבלת מספרים ו�
         if (n)
             total += n;
     });
-   
+
     return total;
 }
 
@@ -27,9 +30,8 @@ sumHelper = function (numbers) { // פונקציה שמקבלת מספרים ו�
         event.isSpecial = false;
         kafka.publish(event)
 */
-var Db = {                                                          
-    CreateEvent: function (action, carNum, section, prediction, type, day, hour, isSpecial) 
-    {
+var Db = {
+    CreateEvent: function (action, carNum, section, prediction, type, day, hour, isSpecial) {
         var newEvent =
         {
             action: action, carNum: carNum, section: section, prediction: prediction, type: type, day: day, hour: hour, isSpecial: isSpecial
@@ -45,20 +47,34 @@ var Db = {
         });
     },
     FindCarEvent: function (carNum, LeavedSection, sendDataToDashbord) {
-        console.log("77777  REACHED HERE !! 77777777")
         // https://docs.mongodb.com/drivers/node/usage-examples/findOne/
-        //--------======= PROBLEM HERE ============---------
         MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) throw err;
-            const dbo = db.db("MyProjectDB"); 
+            const dbo = db.db("MyProjectDB");
             const query = { carNum: carNum, action: "EnterRoad" }; // Find The Entrance Event of specific car
             const transactions = dbo.collection("transactions");
-            const options = { projection: { prediction: 1}, };
-            const result = transactions.findOne(query, options);
-            console.log(result); 
-            db.close();
+            const options = { projection: { prediction: 1 }, };
+            //const result = transactions.findOne(query, options).then(result => sendDataToDashbord({prediction: result.prediction, actual: LeavedSection}); db.close());
+            transactions.find(query).toArray((err, result) => {
+                if (err) throw err;
+                //console.log(result[0].hasOwnProperty('prediction')); 
+                const predictedSection = result[0].prediction;
+                sendDataToDashbord({prediction: predictedSection, actual: LeavedSection}); 
+                //db.close();
+            })
+            // ---==== Add The Actual Leaved Section of Car ====-----
+            const UpdQuery = { carNum: carNum, action: "EnterRoad" };
+            const newvalue = { $set: {outSection: LeavedSection}};
+            transactions.updateOne(UpdQuery, newvalue, function(err, res) {
+                if (err) throw err;
+                console.log("out section updated for leaved car");
+                db.close();
+              });
+            //console.log(result);
+            //sendDataToDashbord({prediction: result.prediction, actual: LeavedSection});
+            //
         });
-       //--------======= PROBLEM HERE ============---------
+        //sendDataToDashbord({prediction: result.prediction, actual: LeavedSection});
         //result.prediction; // The prediction when car entered road
         //LeavedSection; // The actual leaving Section
         //console.log("5555 REACHED HERE !! 555555")
@@ -72,34 +88,38 @@ var Db = {
     UpdateOrder: function (info) {
         console.log('Update Order ' + info);
     },
-    ReadOrders: function (renderTheView) {
-        var sum=0;
+    ReadEventsToCSV: function () {
         MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) throw err;
-            var dbo = db.db("MyProjectDB"); // maybe here find leaving event
-            dbo.collection("transactions").find({}, { projection: { _id: 0, quantity: 1 } }).toArray(function (err, result) {
+            var dbo = db.db("MyProjectDB"); 
+            dbo.collection("transactions").find({}, { projection: { _id: 0 } }).toArray(function (err, result) {
                 if (err) throw err;
-                console.log(result);
-                sum = sumHelper(result);
-                
+                //console.log(result);
+                JSONtoCSV(result);
                 db.close();
-                var cardData = {
-                    id:"totalSum",
-                    title: "אריאל",
-                    totalSum: sum,
-                    percent: 0.8,
-                    icon: "work"
-                };
-
-                renderTheView(cardData);
-
             });
         });
-       
-        //כאן צריך לחשב
-       
-
     }
 };
+function JSONtoCSV(data) 
+{
+    const fileName = './myDataEvents.csv';
+    csv = data.map(row => Object.values(row));
+    csv.unshift(Object.keys(data[0]));
+    if (fs.existsSync(fileName))
+    {
+        fs.writeFileSync(fileName, csv.join('\n'), 'utf8')
+        console.log("Data Have been saved us CSV")
+    }
+    else // if CSV not exist, create one
+    {
+        fs.open(fileName, 'w', function (err, file) {
+            if (err) throw err;
+            console.log('New CSV file has been created');
+            fs.writeFileSync(fileName, csv.join('\n'), 'utf8')
+            console.log("Data Have been saved us CSV")
+          });
+    }
+  }
 
 module.exports = Db

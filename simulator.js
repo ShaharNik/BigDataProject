@@ -4,9 +4,9 @@ ioClient = io.connect("http://localhost:3000");
 
 module.exports.GenerateData= async function () 
 {
-    const minWait = 400;
-    const maxWait = 700;
-    const MaxEvents = 5;
+    const minWait = 100;
+    const maxWait = 300;
+    const MaxEvents = 10;
 
     var type = ['Private', 'Truck', 'Commercial']; // private , מסחרי, משאית 
     var VehiclesOnRoadCounter = 0;
@@ -19,6 +19,7 @@ module.exports.GenerateData= async function ()
         event.carNum = Math.floor(10000000 + Math.random() * 90000000); // 8 digit number
         event.action = "EnterRoad"; // Car can't leave if not entered..
         event.section = Math.floor(Math.random() * 5) + 1; // 1-5 מקטע;
+        // Need to add out section
         event.prediction = 0;
         VehiclesOnRoadCounter++;
         event.type = type[Math.floor(Math.random() * type.length)]; 
@@ -35,6 +36,7 @@ module.exports.GenerateData= async function ()
     console.log(VehiclesOnRoadCounter + " Vehicles on road");
     await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
 
+    // --== Leave road without enter to section ===---
     // for (let i = 0; i < MaxEvents; i++)
     // {
     //     if (Math.random() < 0.2) // 20% probability of getting true;
@@ -60,7 +62,7 @@ module.exports.GenerateData= async function ()
     // await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
 
 
-
+    // --== Enter Cars To Sections ==---
     for (let i = 0; i < Enterevents.length; i++) 
     {
         if (Enterevents[i].action.localeCompare("EnterRoad") == 0) // Enter the un-leaved cars into sections
@@ -81,15 +83,57 @@ module.exports.GenerateData= async function ()
     // All the vehicles leaved the road or entered a section
     // When vehicle enter to road, we need to predict the section he will leave.
     // We need to choose on which section a vehicle will leave, and give some pattern that we will predict.
-    // - Every Car enter between hour 6-8 have 90% chance to leave at section 2
-    // - Every Car enter between hour 16-18 have 90% chance to leave at section 5
+
+    // // - Every Car enter between hour 6-8 have 90% chance to leave at section 2
+    // // - Every Car enter between hour 16-18 have 90% chance to leave at section 5
+
+    // // --== Leave Cars From Sections ==---
+    // for (let i=0; i < Enterevents.length; i++)
+    // {
+    //     if (Enterevents[i].action.localeCompare("EnterSection") == 0) // Choose a leaving section for cars driving in section
+    //     {
+    //         Enterevents[i].action = "LeaveSection";
+    //         // -== Here we random the actual leaving Section of vehicle ! ==-
+    //         if (Enterevents[i].hour >= 8 && Enterevents[i].hour <= 11) // 08:00 - 11:00 -> Section 2
+    //         {
+    //             Enterevents[i].section = 2; // maybe add prob of 90% instead of 100%
+    //             var newHour = Math.floor(Math.random()*24) + entranceHour;
+    //             if (newHour > 24)
+    //                 newHour = 24;
+    //             Enterevents[i].hour = newHour; // update enter section hour
+
+    //         }
+    //         else if (Enterevents[i].hour >= 17 && Enterevents[i].hour <= 19) // 17:00 - 19:00 -> Section 5
+    //         {
+    //             Enterevents[i].section = 5; // maybe add prob of 90% instead of 100%
+    //             var newHour = Math.floor(Math.random()*24) + entranceHour;
+    //             if (newHour > 24)
+    //                 newHour = 24;
+    //             Enterevents[i].hour = newHour; // update enter section hour
+    //         }
+    //         else
+    //         {
+    //             Enterevents[i].section = Math.floor(Math.random() * 5) + 1; // 1-5 מקטע
+    //             var newHour = Math.floor(Math.random()*24) + entranceHour;
+    //             if (newHour > 24)
+    //                 newHour = 24;
+    //             Enterevents[i].hour = newHour; // update enter section hour
+    //         }
+    //         console.log("Vehicle " + i + " Leaved Section: " + Enterevents[i].section);
+    //         ioClient.emit("NewEvent",  Enterevents[i]);
+    //         await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
+    //     }
+    // }
+    // Every Car of type Trunk leave at section 2
+    // Every Car of type Private leave at at section 5
+
+    // --== Leave Cars From Sections ==---
     for (let i=0; i < Enterevents.length; i++)
     {
         if (Enterevents[i].action.localeCompare("EnterSection") == 0) // Choose a leaving section for cars driving in section
         {
             Enterevents[i].action = "LeaveSection";
-            // -== Here we random the actual leaving Section of vehicle ! ==-
-            if (Enterevents[i].hour >= 8 && Enterevents[i].hour <= 11) // 08:00 - 11:00 -> Section 2
+            if (Enterevents[i].type == "Trunk") // Trunk -> Section 2
             {
                 Enterevents[i].section = 2; // maybe add prob of 90% instead of 100%
                 var newHour = Math.floor(Math.random()*24) + entranceHour;
@@ -98,7 +142,7 @@ module.exports.GenerateData= async function ()
                 Enterevents[i].hour = newHour; // update enter section hour
 
             }
-            else if (Enterevents[i].hour >= 17 && Enterevents[i].hour <= 19) // 17:00 - 19:00 -> Section 5
+            else if (Enterevents[i].type == "Private") // Private -> Section 5
             {
                 Enterevents[i].section = 5; // maybe add prob of 90% instead of 100%
                 var newHour = Math.floor(Math.random()*24) + entranceHour;
@@ -119,14 +163,15 @@ module.exports.GenerateData= async function ()
             await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
         }
     }
-    //TODO:  add leaving events or enter another section again
+    //TODO: add events for enter another section again maybe?
+
+    // --== Leave Cars From Road ==---
     for (let i=0; i < Enterevents.length; i++)
     {
-        if (Enterevents[i].action.localeCompare("LeaveSection") == 0) // Choose a leaving section for cars driving in section
+        if (Enterevents[i].action.localeCompare("LeaveSection") == 0) 
         {
             Enterevents[i].action = "LeaveRoad";
-            // -== Here we random the actual leaving Section of vehicle ! ==-
-            console.log("Vehicle " + i + " Leaved Road at section: " + Enterevents[i].section);
+            console.log("Vehicle " + i + " Leaved Road at section: " + Enterevents[i].section); // now the leaving section is the entered section
             ioClient.emit("NewEvent",  Enterevents[i]);
             await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
         }

@@ -9,6 +9,8 @@ const kafka = require('./kafkaProduce');
 const kafkaConsumer = require('./kafkaConsume');
 const bodyParser = require('body-parser');
 
+// ---==== Mongo ===----
+const dataModel = require('./myMongo');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -35,7 +37,8 @@ io.on("connection", (socket) => {
         io.emit('new car', predicted)
         socket.emit('new car', predicted)
     })
-    socket.on("accuracy", (acc) => { console.log("The accuracy is: " + acc) });
+    socket.on("accuracy", (acc) => { console.log("The accuracy is: " + acc) })
+    socket.on("train data", () => dataModel.ReadEventsToCSV());
 
 });
 

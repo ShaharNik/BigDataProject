@@ -60,10 +60,9 @@ if (obj.action == "EnterRoad" || obj.action == "LeaveRoad")
 {
   if (obj.action == "EnterRoad")
   {
-    console.log("Enter Road Prediction:")
+    console.log("Enter Road Prediction:" + obj.prediction)
     obj.prediction = Math.floor(Math.random() * 5) + 1; // TODO: Need predict with bigML !!
     //Need to predict only Once for a car when enter road, and not changing it ! 
-    console.log(obj.prediction)   
     dataModel.CreateEvent(obj.action, obj.carNum, obj.section, obj.prediction, obj.type, obj.day, obj.hour, obj.isSpecial);
   }
   else //obj.action == "LeaveRoad"

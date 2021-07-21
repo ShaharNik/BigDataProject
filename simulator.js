@@ -6,11 +6,12 @@ module.exports.GenerateData= async function ()
 {
     const minWait = 100;
     const maxWait = 300;
-    const MaxEvents = 10;
+    const MaxEvents = 1;
 
     var type = ['Private', 'Truck', 'Commercial']; // private , מסחרי, משאית 
     var VehiclesOnRoadCounter = 0;
     const Enterevents = [];
+    await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
     await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
     // --== Enter Cars To The Road ==---
     for (let i = 0; i < MaxEvents; i++)
@@ -29,7 +30,7 @@ module.exports.GenerateData= async function ()
 
         Enterevents.push(event);
 
-        console.log(i + " vehicle enter to road in hour: " + event.hour);
+        console.log(i + " vehicle of type:  " + event.type + " entered to road");
         ioClient.emit("NewEvent",  event); // פה נשלח מידע לאיוונט בשם של הסוקט, הטיפול בו נמצא באפ והוא מדפיס את המידע לקונסול ושולח אותו לקאפקה
         await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
     }

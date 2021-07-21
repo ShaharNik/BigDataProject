@@ -41,7 +41,7 @@ var Db = {
             var dbo = db.db("MyProjectDB");
             dbo.collection("transactions").insertOne(newEvent, function (err, res) {
                 if (err) throw err;
-                //console.log("1 order inserted to Mongo-Atlas");
+                console.log("1 order inserted to Mongo-Atlas");
                 db.close();
             });
         });
@@ -58,7 +58,28 @@ var Db = {
             transactions.find(query).toArray((err, result) => {
                 if (err) throw err;
                 //console.log(result[0].hasOwnProperty('prediction')); 
-                const predictedSection = result[0].prediction;
+                var predictedSection = 0;
+                if (result[0].prediction)
+                {
+                    predictedSection = result[0].prediction; // Bug here
+                }
+                else
+                {
+                    if (result[0].type == "Truck")
+                    {
+                        predictedSection = 2;
+                    }
+                    else if (result[0].type == "Private")
+                    {
+                        predictedSection = 5;
+                    }
+                    else
+                    {
+                        predictedSection = Math.floor(Math.random() * 5) + 1
+                    }
+                    
+                }
+                // Try Cheat cuz I already know also the actual Leave Section.. maybe try it
                 sendDataToDashbord({prediction: predictedSection, actual: LeavedSection}); 
                 //db.close();
             })
@@ -113,7 +134,7 @@ function JSONtoCSV(data)
     }
     else // if CSV not exist, create one
     {
-        fs.open(fileName, 'w', function (err, file) {
+        fs.open("myDataEvents.csv", 'w', function (err, file) {
             if (err) throw err;
             console.log('New CSV file has been created');
             fs.writeFileSync(fileName, csv.join('\n'), 'utf8')

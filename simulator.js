@@ -6,7 +6,7 @@ module.exports.GenerateData= async function ()
 {
     const minWait = 100;
     const maxWait = 300;
-    const MaxEvents = 1;
+    const MaxEvents = 10;
 
     var type = ['Private', 'Truck', 'Commercial']; // private , מסחרי, משאית 
     var VehiclesOnRoadCounter = 0;
@@ -20,7 +20,6 @@ module.exports.GenerateData= async function ()
         event.carNum = Math.floor(10000000 + Math.random() * 90000000); // 8 digit number
         event.action = "EnterRoad"; // Car can't leave if not entered..
         event.section = Math.floor(Math.random() * 5) + 1; // 1-5 מקטע;
-        // Need to add out section
         event.prediction = 0;
         VehiclesOnRoadCounter++;
         event.type = type[Math.floor(Math.random() * type.length)]; 

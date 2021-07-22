@@ -31,10 +31,10 @@ sumHelper = function (numbers) { // פונקציה שמקבלת מספרים ו�
         kafka.publish(event)
 */
 var Db = {
-    CreateEvent: function (action, carNum, section, prediction, type, day, hour, isSpecial) {
+    CreateEvent: function (action, carNum, section, prediction, type, day, hour, isSpecial, outSection) {
         var newEvent =
         {
-            action: action, carNum: carNum, section: section, prediction: prediction, type: type, day: day, hour: hour, isSpecial: isSpecial
+            action: action, carNum: carNum, section: section, prediction: prediction, type: type, day: day, hour: hour, isSpecial: isSpecial, outSection: outSection
         };
         MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) throw err;
@@ -58,13 +58,15 @@ var Db = {
             transactions.find(query).toArray((err, result) => {
                 if (err) throw err;
                 //console.log(result[0].hasOwnProperty('prediction')); 
+
                 var predictedSection = 0;
                 if (result[0].prediction)
                 {
                     predictedSection = result[0].prediction; // Bug here
                 }
-                else
+                else // plaster
                 {
+                    console.log("Bad!! predicted is not generated yet...");
                     if (result[0].type == "Truck")
                     {
                         predictedSection = 2;

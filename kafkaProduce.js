@@ -30,7 +30,7 @@ const kafkaConf = {
 // -= instance 2 =-
 const prefix = "25rvtceg-";
 
-const topic = `${prefix}myTest`; // send to this topic
+const topic = `${prefix}carsEvents`; // send to this topic
 const producer = new Kafka.Producer(kafkaConf);
 const myProducer = require('./simulator');
 

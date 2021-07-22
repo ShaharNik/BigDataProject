@@ -38,7 +38,7 @@ const kafkaConf = {
 
 // -= instance 2 =-
 const prefix = "25rvtceg-";
-const topic = `${prefix}myTest`;
+const topic = `${prefix}carsEvents`;
 const producer = new Kafka.Producer(kafkaConf);
 
 const genMessage = m => new Buffer.alloc(m.length, m);
@@ -72,51 +72,52 @@ consumer.on("data", function (m) {
   //  console.log(obj.isSpecial);
   //  console.log("===----====----===");
   if (obj.action == "EnterRoad" || obj.action == "LeaveRoad") {
-    if (obj.action == "EnterRoad") {
-      // var connection = new bigml.BigML('SHAHARNIK1',
-      //   'e02260ed66f3dd2ef0f862bd9c7c27b6cab9d28a'
-      // )
-      // var source = new bigml.Source(connection);
-      // source.create('./myDataEvents.csv', function (error, sourceInfo) {
-      //   if (!error && sourceInfo) {
-      //     var dataset = new bigml.Dataset(connection);
-      //     dataset.create(sourceInfo, function (error, datasetInfo) { //section: obj.section, type: obj.type, day: obj.day, hour: obj.hour
-      //       if (!error && datasetInfo) {
-      //         var model = new bigml.Model(connection);
-      //         model.create(datasetInfo, function (error, modelInfo) {
-      //           if (!error && modelInfo) {
-      //             var prediction = new bigml.Prediction(connection);
-      //             prediction.create(modelInfo, { section: obj.section, type: obj.type, day: obj.day, hour: obj.hour }, function(error, pred){
-      //               console.log(pred.object.output);
-      //               obj.prediction = Math.round(pred.object.output);
-      //               dataModel.CreateEvent(obj.action, obj.carNum, obj.section, obj.prediction, obj.type, obj.day, obj.hour, obj.isSpecial);
-      //             })
+    if (obj.action == "EnterRoad") 
+    {
+      var connection = new bigml.BigML('SHAHARNIK1',
+        'e02260ed66f3dd2ef0f862bd9c7c27b6cab9d28a'
+      )
+      var source = new bigml.Source(connection);
+      source.create('./myDataEvents.csv', function (error, sourceInfo) {
+        if (!error && sourceInfo) {
+          var dataset = new bigml.Dataset(connection);
+          dataset.create(sourceInfo, function (error, datasetInfo) { //section: obj.section, type: obj.type, day: obj.day, hour: obj.hour
+            if (!error && datasetInfo) {
+              var model = new bigml.Model(connection);
+              model.create(datasetInfo, function (error, modelInfo) {
+                if (!error && modelInfo) {
+                  var prediction = new bigml.Prediction(connection);
+                  prediction.create(modelInfo, { section: obj.section, type: obj.type, day: obj.day, hour: obj.hour }, function(error, pred){
+                    console.log(pred.object.output);
+                    obj.prediction = Math.round(pred.object.output);
+                    dataModel.CreateEvent(obj.action, obj.carNum, obj.section, obj.prediction, obj.type, obj.day, obj.hour, obj.isSpecial, obj.outSection);
+                    //ioClient.emit('new car', {prediction: obj.prediction, actual: obj.outSection}) // need add obj.outSection
+                  })
 
-      //             //console.log(prediction.prediction);
-      //             //const localmodel = new bigml.LocalModel(prediction.resource, connection); //{"type":"Truck"}
-      //             //localmodel.predict({ section: obj.section, type: obj.type, day: obj.day, hour: obj.hour }, function (error, pred) {
-      //               //console.log(prediction); // TODO: Fix Bug: "Cannot read property 'prediction'""
-      //               //obj.prediction = prediction.prediction;
-      //               //console.log("obj.prediction: " + obj.prediction)
-      //               //dataModel.CreateEvent(obj.action, obj.carNum, obj.section, obj.prediction, obj.type, obj.day, obj.hour, obj.isSpecial);
-      //             //});
-      //           }
-      //         });
-      //       }
-      //     });
-      //   }
-      // });
-      // NEED ADD DATA TO MONGO! ITS EMPTY !
-      if (obj.type == "Truck") {
-        obj.prediction = 2;
-      }
-      else if (obj.type == "Private") {
-        obj.prediction = 5;
-      }
-      else {
-        obj.prediction = Math.floor(Math.random() * 5) + 1
-      }
-      dataModel.CreateEvent(obj.action, obj.carNum, obj.section, obj.prediction, obj.type, obj.day, obj.hour, obj.isSpecial);
+                  //console.log(prediction.prediction);
+                  //const localmodel = new bigml.LocalModel(prediction.resource, connection); //{"type":"Truck"}
+                  //localmodel.predict({ section: obj.section, type: obj.type, day: obj.day, hour: obj.hour }, function (error, pred) {
+                    //console.log(prediction); // TODO: Fix Bug: "Cannot read property 'prediction'""
+                    //obj.prediction = prediction.prediction;
+                    //console.log("obj.prediction: " + obj.prediction)
+                    //dataModel.CreateEvent(obj.action, obj.carNum, obj.section, obj.prediction, obj.type, obj.day, obj.hour, obj.isSpecial);
+                  //});
+                }
+              });
+            }
+          });
+        }
+      });
+      // if (obj.type == "Truck") {
+      //   obj.prediction = 2;
+      // }
+      // else if (obj.type == "Private") {
+      //   obj.prediction = 5;
+      // }
+      // else {
+      //   obj.prediction = Math.floor(Math.random() * 5) + 1
+      // }
+      // dataModel.CreateEvent(obj.action, obj.carNum, obj.section, obj.prediction, obj.type, obj.day, obj.hour, obj.isSpecial);
       // const localModel = new bigml.LocalModel('model/60f7d379cb4f96592d0d4475', connection);
       // localModel.predict({section: obj.section, type: obj.type, day: obj.day, hour: obj.hour},
       //   function (error, prediction) {
@@ -134,6 +135,7 @@ consumer.on("data", function (m) {
     else //obj.action == "LeaveRoad"
     {
       // need to find our prediction of leaved car from the car's entrance event and send it with the actual leaved section to dashboard
+      // Need to findCar only if the prediction is completed
       dataModel.FindCarEvent(obj.carNum, obj.section, (data) => { ioClient.emit('new car', data) });
     }
 

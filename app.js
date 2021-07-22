@@ -21,7 +21,9 @@ app.set('view engine', 'ejs');
 app.use(express.static("public"));
 
  //app.get('/', (req, res) => res.send("<a href='/send'>Send</a> <br/><a href=''>View</a>"));
- //app.get('/send', (req, res) => res.render('Sender')); // CM instead of Sender
+ app.get('/send', (req, res) => res.render('Sender'));
+ app.get('/Dashboard', (req, res) => res.render('Dashboard'));
+
  app.get('/', (req, res) => res.render('ConfusionMatrix')); // CM instead of Sender
 
 

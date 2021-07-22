@@ -4,8 +4,8 @@ ioClient = io.connect("http://localhost:3000");
 
 module.exports.GenerateData= async function () 
 {
-    const minWait = 100;
-    const maxWait = 300;
+    const minWait = 1000;
+    const maxWait = 2000;
     const MaxEvents = 10;
 
     var type = ['Private', 'Truck', 'Commercial']; // private , מסחרי, משאית 
@@ -26,6 +26,17 @@ module.exports.GenerateData= async function ()
         event.day = Math.floor(Math.random() * 8) + 1; // 1-7
         event.hour = Math.floor(Math.random()*24) + 1;
         event.isSpecial = Math.random() < 0.2; //20% probability of getting true;
+
+        event.outSection = 0;
+        if (event.type == "Truck") {
+            event.outSection = 2;
+        }
+        else if (event.type == "Private") {
+            event.outSection = 5;
+        }
+        else {
+            event.outSection = Math.floor(Math.random() * 5) + 1
+        }
 
         Enterevents.push(event);
 
@@ -133,7 +144,7 @@ module.exports.GenerateData= async function ()
         if (Enterevents[i].action.localeCompare("EnterSection") == 0) // Choose a leaving section for cars driving in section
         {
             Enterevents[i].action = "LeaveSection";
-            if (Enterevents[i].type == "Trunk") // Trunk -> Section 2
+            if (Enterevents[i].type == "Truck") // Trunk -> Section 2
             {
                 Enterevents[i].section = 2; // maybe add prob of 90% instead of 100%
                 var newHour = Math.floor(Math.random()*24) + entranceHour;
@@ -164,14 +175,14 @@ module.exports.GenerateData= async function ()
         }
     }
     //TODO: add events for enter another section again maybe?
-
+    await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait + 1200) + minWait + 1000));
     // --== Leave Cars From Road ==---
     for (let i=0; i < Enterevents.length; i++)
     {
         if (Enterevents[i].action.localeCompare("LeaveSection") == 0) 
         {
             Enterevents[i].action = "LeaveRoad";
-            console.log("Vehicle " + i + " Leaved Road at section: " + Enterevents[i].section); // now the leaving section is the entered section
+            console.log("Vehicle " + i +" type: "+ Enterevents[i].type + " Leaved Road at section: " + Enterevents[i].section); // now the leaving section is the entered section
             ioClient.emit("NewEvent",  Enterevents[i]);
             await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
         }

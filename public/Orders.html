@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>מערכת הזמנת מוצרים</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" href="Orders.css" crossorigin="anonymous">
+  </head>
+  <body dir="rtl">
+    <div class="testbox">
+      <form action="/getOrder" method="post">
+        <div class="banner">
+          <h1>טופס הזמנה</h1>
+        </div>
+        <h2>Order Header</h2>
+        <div class="item">
+          <p>Name</p>
+          <div class="name-item">
+            <input type="text" name="name" placeholder="First"/>
+            <input type="text" name="orderNumber" placeholder="Order"/>
+          </div>          
+        </div>
+        <div class="item">
+            <p>Start Date</p>
+            <input type="date" name="orderDate"/>
+            <i class="fas fa-calendar-alt"></i>
+          </div>
+      
+        <h2>Order Details</h2>
+        <div class="city-item">
+             <select name="product">
+              <option value="Milk">חלב</option>
+              <option value="Pizza">פיצה</option>
+              <option value="Cornflakes">קורנפלקס</option>
+              <option value="Egges">ביצים</option>
+              <option value="Laptop">לאפטופ</option>
+              <option value="SpeedBoat">סירת מרוץ</option>
+            </select>
+          </div>
+
+        <div class="item">
+          <p>Quantity</p>
+          <input type="number" name="quantity" min="1" max="100"/>
+        </div>       
+       
+        <div class="btn-block">
+          <button type="submit">שלח</button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

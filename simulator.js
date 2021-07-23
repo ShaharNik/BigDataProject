@@ -4,8 +4,8 @@ ioClient = io.connect("http://localhost:3000");
 
 module.exports.GenerateData= async function () 
 {
-    const minWait = 1000;
-    const maxWait = 2000;
+    const minWait = 300;
+    const maxWait = 500;
     const MaxEvents = 10;
 
     var type = ['Private', 'Truck', 'Commercial']; // private , מסחרי, משאית 

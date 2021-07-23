@@ -115,7 +115,7 @@ var Db = {
         MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) throw err;
             var dbo = db.db("MyProjectDB"); 
-            dbo.collection("transactions").find({}, { projection: { _id: 0 } }).toArray(function (err, result) {
+            dbo.collection("transactions").find({}, { projection: { _id: 0, action: 0, carNum: 0 } }).toArray(function (err, result) {
                 if (err) throw err;
                 //console.log(result);
                 JSONtoCSV(result);

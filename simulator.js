@@ -6,7 +6,7 @@ module.exports.GenerateData= async function (publish2Kafka)
 {
     const minWait = 300;
     const maxWait = 500;
-    const MaxEvents = 13;
+    const MaxEvents = 5;
 
     var type = ['Private', 'Truck', 'Commercial']; // private , מסחרי, משאית 
     var VehiclesOnRoadCounter = 0;

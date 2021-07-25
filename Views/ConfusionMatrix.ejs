@@ -13,29 +13,26 @@
             socket = io.connect();
             //alert("connected");
         }
-        function sendMessage(total) {
-            socket.emit("totalWaitingCalls", { totalWaiting: total });
-        }
+        // function sendMessage(total) {
+        //     socket.emit("totalWaitingCalls", { totalWaiting: total });
+        // }
     </script>
     <script>
         function startListenForEvents() {
             var table = document.getElementById('confusionMatrixTable');
-            var carNum = 1;
-            socket.on('car entered', function (predAndCar)                         
-            {
+            //var carNum = 1;
+            socket.on('car entered', function (predAndCar) {
                 //alert("Car entered!!!")
                 if (predAndCar)
                     console.log(predAndCar);
                 else
                     alert("problem!!!")
 
-                if (predAndCar < 1) {
+                if (predAndCar.prediction < 1) {
                     alert("found problem! Dividing by zero");
                     console.log("prediction cant be zero");
                 }
                 else {
-                    
-                    // Add label "car entered road: predicted leave road section is: " pred
                     var ul = document.getElementById("dynamic-list");
                     //var candidate = document.getElementById("candidate");
                     var li = document.createElement("li");
@@ -45,21 +42,20 @@
                     ul.appendChild(li);
                 }
             });
-            socket.on('car leaved', function (predActualAndCar) // when clicking listen button we listening to new car event                         
-            {
+            socket.on('car leaved', function (predActualAndCar) {
                 //alert("Car leaved!!!")
-                console.log(predActualAndCar); // contain json of pred and actual sections
+                console.log(predActualAndCar); // contain json of pred and car number
                 var ul = document.getElementById("dynamic-list");
-                var li = document.getElementById(predActualAndCar.carNum); // Need to Know the carNumber
-                if (predActualAndCar.actual == predActualAndCar.prediction)
-                {
-                    li.style.color="green";
+                var li = document.getElementById(predActualAndCar.carNum);
+                if (li != null) { // If still Exist and not deleted
+                    if (predActualAndCar.actual == predActualAndCar.prediction) {
+                        li.style.color = "green";
+                    }
+                    else {
+                        li.style.color = "red";
+                    }
+                    li.append(" Actual Leaved Section: " + predActualAndCar.actual)
                 }
-                else
-                {
-                    li.style.color="red";
-                }
-                li.append(" Actual Leaved Section: " + predActualAndCar.actual)
 
                 //ul.removeChild(item);
                 if (predActualAndCar.actual < 1 || predActualAndCar.prediction < 1) {
@@ -77,13 +73,22 @@
         }
     </script>
     <script>
+        function clearCarsRecords() {
+            var ul = document.getElementById("dynamic-list");
+            ul.innerHTML = "";
+            // while (ul.firstChild) {
+            //     ul.removeChild(root.firstChild);
+            // }
+        }
+    </script>
+    <script>
         function trainDataInBigML() {
             alert("Reading all data from Mongo TO CSV");
             const trainBut = document.getElementById("trainData");
             trainBut.disabled = true;
             setTimeout(() => {
                 trainBut.disabled = false;
-            }, 5000)
+            }, 8000)
             socket.emit("train data");
         }
     </script>
@@ -200,6 +205,8 @@
             <input type="button" id="startListen" onclick="startListenForEvents()" value="Start Listen"
                 style="text-align: center; " />
             <input type="button" id="trainData" onclick="trainDataInBigML()" value="Train Data"
+                style="text-align: center; " />
+            <input type="button" id="clearRecords" onclick="clearCarsRecords()" value="Clear Records"
                 style="text-align: center; " />
             <! –– <input type="button" id="StopAndAcc" onclick="CheckAccuracy()" value="Show Accuracy"
                 style="text-align: center; " />

@@ -3,26 +3,12 @@ const app = express();
 var server = require('http').createServer(app);
 const io = require("socket.io")(server);
 const port = 3000;
-const bodyParser = require('body-parser');
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 
 app.set('view engine', 'ejs');
 app.use(express.static("public"));
 
 //------------ kafka------------
-const kafka = require('./kafkaProduce');
-// const kafkaConsumer = require('./Kafka/kafkaConsume');
-
-// ---==== Mongo ===----
-const dataModel = require('./myMongo');
-
-// const redisReceiver = require('./Model/RedisForArielReciver');
-// const redisSender = require ('./Model/RedisForArielSender');
-// const redisConnect = require ('./RedisConnector/RedisNode');
-
-
+const kafka = require('./Kafka/kafkaProduce');
 
 // -==== Hot way ====-
 const HotWay = require('./HotWay/HotWayController');
@@ -71,43 +57,8 @@ app.get('/Dashboard', (req, res) => res.render('Dashboard', {
 
 
 // -==== Cold Way -====
+const ColdWay = require('./ColdWay/ColdWayController');
 app.get('/', (req, res) => res.render('ConfusionMatrix')); // CM instead of Sender
-
-
-//TODO : remove socket.io from here
-//------------ Socket.io ----------------
-io.on("connection", (socket) => {
-    console.log("new user connected");
-    socket.on("totalWaitingCalls", (msg) => { console.log(msg.totalWaiting) });
-    //socket.on("NewEvent", (msg) => { //console.log(JSON.stringify(msg));
-                                       //kafka.publish(msg) });
-    socket.on("car entered", (predicted) => {
-        //console.log("new car event arrived a app.js");
-        io.emit('car entered', predicted)
-        //socket.emit('car entered', predicted)
-    })
-    socket.on("car leaved", (predAndActual) => {
-        io.emit('car leaved', predAndActual)
-        //socket.emit('car leaved', predAndActual)
-    })
-    socket.on("accuracy", (acc) => { console.log("The accuracy is: " + acc) })
-    socket.on("train data", () => dataModel.ReadEventsToCSV());
-
-});
-
-
-//------------------- kafka -----------
-/* Kafka Producer Configuration */
-
-//
-//const client1 = new kafka.KafkaClient({kafkaHost: "localhost:9092"});
-//kafkaConsumer.consumer;
-
-
-
-
-//------------------------------------
-
 
 server.listen(port, () => console.log(`Ariel app listening at http://localhost:${port}`));
 

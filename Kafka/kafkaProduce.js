@@ -1,7 +1,9 @@
+// https://www.cloudkarafka.com/ הפעלת קפקא במסגרת ספק זה
+
 const uuid = require("uuid");
 const Kafka = require("node-rdkafka");
 
-const kafkaConf = {
+const kafkaConf = { 
   "group.id": "cloudkarafka-example",
   // -= instance 1 =-
   //"metadata.broker.list": "glider-01.srvs.cloudkafka.com:9094,glider-02.srvs.cloudkafka.com:9094,glider-03.srvs.cloudkafka.com:9094".split(","),
@@ -19,7 +21,7 @@ const kafkaConf = {
   // -= instance 2 =-
   "sasl.username": "25rvtceg",
   "sasl.password": "oh-CeZsSiWvmvN4g7-IswIgcTAR5d2Xt",
-
+  
   "debug": "generic,broker,security"
 };
 // -= instance 1 =-
@@ -27,33 +29,29 @@ const kafkaConf = {
 
 // -= instance 2 =-
 const prefix = "25rvtceg-";
-const topic = `${prefix}carsEvents`;
 
-//const prefix = process.env.CLOUDKARAFKA_USERNAME;
+const topic = `${prefix}carsEvents`; // send to this topic
+const producer = new Kafka.Producer(kafkaConf);
+const myProducer = require('../simulator');
 
-const topics = [topic];
-const consumer = new Kafka.KafkaConsumer(kafkaConf, {
-  "auto.offset.reset": "beginning"
+const genMessage = m => new Buffer.alloc(m.length,m);
+
+producer.on("ready", function(arg) {
+  console.log(`producer Ariel is ready.`);
+  console.log("Activating simulator..")
+  myProducer.GenerateData(publish2Kafka);
 });
-
-consumer.on("error", function (err) {
-  console.error(err);
-});
-consumer.on("ready", function (arg) {
-  console.log(`Consumer ${arg.name} ready`);
-  consumer.subscribe(topics);
-  console.log(`Consumer ${arg.name} consuming on topic:`, topic);
-  consumer.consume();
-});
-
-consumer.on("disconnected", function (arg) {
-  process.exit();
-});
-consumer.on('event.error', function (err) {
-  console.error(err);
-  process.exit(1);
-});
-
-consumer.connect();
-
-module.exports.consumer = consumer;
+producer.connect();
+//publish is a name can be any name...
+// module.exports.publish= function(msg)
+// {   
+//   m=JSON.stringify(msg);
+//   producer.produce(topic, -1, genMessage(m), uuid.v4());  //Send to KAFKA
+//   //producer.disconnect();   
+// }
+function publish2Kafka(msg)
+{   
+  m=JSON.stringify(msg);
+  producer.produce(topic, -1, genMessage(m), uuid.v4());  //Send to KAFKA
+  //producer.disconnect();   
+}

@@ -108,8 +108,8 @@ consumer.on("data", function (m) {
       var pred = bigModel.MyBigML_Model_Prediction(obj.section, obj.prediction, obj.type, obj.day, obj.hour, obj.isSpecial);
       console.log(pred)
       obj.prediction = Math.round(pred);
-      if (obj.prediction == 0) {
-        console.log("Predicted is not updated yet !!")
+      if (obj.prediction == 0 || null) {
+        console.log("Predicted is not updated yet !!");
         if (obj.type == "Truck") {
           obj.prediction = 2;
         }

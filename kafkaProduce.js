@@ -39,11 +39,17 @@ const genMessage = m => new Buffer.alloc(m.length,m);
 producer.on("ready", function(arg) {
   console.log(`producer Ariel is ready.`);
   console.log("Activating simulator..")
-  myProducer.GenerateData();
+  myProducer.GenerateData(publish2Kafka);
 });
 producer.connect();
 //publish is a name can be any name...
-module.exports.publish= function(msg)
+// module.exports.publish= function(msg)
+// {   
+//   m=JSON.stringify(msg);
+//   producer.produce(topic, -1, genMessage(m), uuid.v4());  //Send to KAFKA
+//   //producer.disconnect();   
+// }
+function publish2Kafka(msg)
 {   
   m=JSON.stringify(msg);
   producer.produce(topic, -1, genMessage(m), uuid.v4());  //Send to KAFKA

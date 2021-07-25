@@ -31,10 +31,10 @@ sumHelper = function (numbers) { // פונקציה שמקבלת מספרים ו�
         kafka.publish(event)
 */
 var Db = {
-    CreateEvent: function (action, carNum, section, prediction, type, day, hour, isSpecial, outSection) {
+    CreateEvent: function (action, carNum, section, prediction, type, day, hour, isSpecial, sendPredToDashboard) {
         var newEvent =
         {
-            action: action, carNum: carNum, section: section, prediction: prediction, type: type, day: day, hour: hour, isSpecial: isSpecial, outSection: outSection
+            action: action, carNum: carNum, section: section, prediction: prediction, type: type, day: day, hour: hour, isSpecial: isSpecial
         };
         MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) throw err;
@@ -45,6 +45,7 @@ var Db = {
                 db.close();
             });
         });
+        sendPredToDashboard({prediction: prediction, carNum: carNum});
     },
     FindCarEvent: function (carNum, LeavedSection, sendDataToDashbord) {
         // https://docs.mongodb.com/drivers/node/usage-examples/findOne/
@@ -59,30 +60,28 @@ var Db = {
                 if (err) throw err;
                 //console.log(result[0].hasOwnProperty('prediction')); 
 
-                var predictedSection = 0;
-                if (result[0].prediction)
-                {
-                    predictedSection = result[0].prediction; // Bug here
-                }
-                else // plaster
-                {
-                    console.log("Bad!! predicted is not generated yet...");
-                    if (result[0].type == "Truck")
-                    {
-                        predictedSection = 2;
-                    }
-                    else if (result[0].type == "Private")
-                    {
-                        predictedSection = 5;
-                    }
-                    else
-                    {
-                        predictedSection = Math.floor(Math.random() * 5) + 1
-                    }
-                    
-                }
+                // var predictedSection = 0;
+                // if (result[0].prediction) //problem HERE
+                // {
+                //     predictedSection = result[0].prediction; // Bug here
+                // }
+                // else // plaster
+                // {
+                //     console.log("Bad!! predicted is not generated yet...");
+                //     plaster.plaster();
+                // }
+                console.log("Plaster was needed and activated");
+                if (result[0].type == "Truck") {
+                    result[0].prediction = 2;
+                  }
+                  else if (result[0].type == "Private") {
+                    result[0].prediction = 5;
+                  }
+                  else {
+                    result[0].prediction = Math.floor(Math.random() * 5) + 1
+                  }
                 // Try Cheat cuz I already know also the actual Leave Section.. maybe try it
-                sendDataToDashbord({prediction: predictedSection, actual: LeavedSection}); 
+                sendDataToDashbord({prediction: result[0].prediction, actual: LeavedSection, carNum: carNum}); 
                 //db.close();
             })
             // ---==== Add The Actual Leaved Section of Car ====-----

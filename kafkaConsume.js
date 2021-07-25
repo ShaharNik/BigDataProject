@@ -8,7 +8,8 @@ const dataModel = require('./myMongo');
 // --== BigML ==--
 var bigml = require('bigml');
 var bigModel = require('./bigML')
-
+// -=plaster=-
+var plaster = require('./plaster')
 // -= Socket.io =-
 //io = require("socket.io-client");
 //ioClient = io.connect("http://localhost:3000");
@@ -108,19 +109,20 @@ consumer.on("data", function (m) {
       var pred = bigModel.MyBigML_Model_Prediction(obj.section, obj.prediction, obj.type, obj.day, obj.hour, obj.isSpecial);
       console.log(pred)
       obj.prediction = Math.round(pred);
-      if (obj.prediction == 0 || null) {
-        console.log("Predicted is not updated yet !!");
+      if (obj.prediction == 0 || obj.prediction == null) {
+        console.log("Predicted is not updated yet !! !")
+        console.log("Plaster was needed and activated"); // plaster
         if (obj.type == "Truck") {
-          obj.prediction = 2;
-        }
-        else if (obj.type == "Private") {
-          obj.prediction = 5;
-        }
-        else {
-          obj.prediction = Math.floor(Math.random() * 5) + 1
-        }
+            obj.prediction = 2;
+          }
+          else if (obj.type == "Private") {
+            obj.prediction = 5;
+          }
+          else {
+            obj.prediction = Math.floor(Math.random() * 5) + 1
+          }
       }
-      dataModel.CreateEvent(obj.action, obj.carNum, obj.section, obj.prediction, obj.type, obj.day, obj.hour, obj.isSpecial);
+      dataModel.CreateEvent(obj.action, obj.carNum, obj.section, obj.prediction, obj.type, obj.day, obj.hour, obj.isSpecial, (data) => { ioClient.emit('car entered', data) });
       // const localModel = new bigml.LocalModel('model/60f7d379cb4f96592d0d4475', connection);
       // localModel.predict({section: obj.section, type: obj.type, day: obj.day, hour: obj.hour},
       //   function (error, prediction) {
@@ -139,12 +141,13 @@ consumer.on("data", function (m) {
     {
       // need to find our prediction of leaved car from the car's entrance event and send it with the actual leaved section to dashboard
       // Need to findCar only if the prediction is completed
-      dataModel.FindCarEvent(obj.carNum, obj.section, (data) => { ioClient.emit('new car', data) });
+      dataModel.FindCarEvent(obj.carNum, obj.section, (data) => { ioClient.emit('car leaved', data) });
     }
 
   }
 
 });
+
 
 consumer.on("disconnected", function (arg) {
   process.exit();

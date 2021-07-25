@@ -1,17 +1,16 @@
 io = require("socket.io-client");
-ioClient = io.connect("http://localhost:3000");
+ioClient = io.connect("http://localhost:3000"); // why need this?!
 
 
-module.exports.GenerateData= async function () 
+module.exports.GenerateData= async function (publish2Kafka) 
 {
     const minWait = 300;
     const maxWait = 500;
-    const MaxEvents = 10;
+    const MaxEvents = 13;
 
     var type = ['Private', 'Truck', 'Commercial']; // private , מסחרי, משאית 
     var VehiclesOnRoadCounter = 0;
     const Enterevents = [];
-    await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
     await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
     // --== Enter Cars To The Road ==---
     for (let i = 0; i < MaxEvents; i++)
@@ -41,8 +40,9 @@ module.exports.GenerateData= async function ()
         Enterevents.push(event);
 
         console.log(i + " vehicle of type:  " + event.type + " entered to road");
-        ioClient.emit("NewEvent",  event); // פה נשלח מידע לאיוונט בשם של הסוקט, הטיפול בו נמצא באפ והוא מדפיס את המידע לקונסול ושולח אותו לקאפקה
-        await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
+        //ioClient.emit("NewEvent",  event); // פה נשלח מידע לאיוונט בשם של הסוקט, הטיפול בו נמצא באפ והוא מדפיס את המידע לקונסול ושולח אותו לקאפקה
+        publish2Kafka(event);
+        await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait+2000));
     }
     console.log(VehiclesOnRoadCounter + " Vehicles on road");
     await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
@@ -85,7 +85,8 @@ module.exports.GenerateData= async function ()
             if (newHour > 24)
                 newHour = 24;
             Enterevents[i].hour = newHour; // update enter section hour
-            ioClient.emit("NewEvent",  Enterevents[i]);
+            //ioClient.emit("NewEvent",  Enterevents[i]);
+            publish2Kafka(Enterevents[i]);
             console.log("Vehicle " + i + " Entered Section: " + Enterevents[i].section);
             Enterevents[i].hour = entranceHour; // want to predict with this
         }
@@ -170,12 +171,13 @@ module.exports.GenerateData= async function ()
                 Enterevents[i].hour = newHour; // update enter section hour
             }
             console.log("Vehicle " + i + " Leaved Section: " + Enterevents[i].section);
-            ioClient.emit("NewEvent",  Enterevents[i]);
+            //ioClient.emit("NewEvent",  Enterevents[i]);
+            publish2Kafka(Enterevents[i]);
             await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
         }
     }
     //TODO: add events for enter another section again maybe?
-    await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait + 1200) + minWait + 1000));
+    await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait + 5200) + minWait + 3000));
     // --== Leave Cars From Road ==---
     for (let i=0; i < Enterevents.length; i++)
     {
@@ -183,7 +185,8 @@ module.exports.GenerateData= async function ()
         {
             Enterevents[i].action = "LeaveRoad";
             console.log("Vehicle " + i +" type: "+ Enterevents[i].type + " Leaved Road at section: " + Enterevents[i].section); // now the leaving section is the entered section
-            ioClient.emit("NewEvent",  Enterevents[i]);
+            //ioClient.emit("NewEvent",  Enterevents[i]);
+            publish2Kafka(Enterevents[i]);
             await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * maxWait) + minWait));
         }
     }

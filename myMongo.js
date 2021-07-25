@@ -70,9 +70,18 @@ var Db = {
                 //     console.log("Bad!! predicted is not generated yet...");
                 //     plaster.plaster();
                 // }
-                plaster.plaster();
+                console.log("Plaster was needed and activated");
+                if (result[0].type == "Truck") {
+                    result[0].prediction = 2;
+                  }
+                  else if (result[0].type == "Private") {
+                    result[0].prediction = 5;
+                  }
+                  else {
+                    result[0].prediction = Math.floor(Math.random() * 5) + 1
+                  }
                 // Try Cheat cuz I already know also the actual Leave Section.. maybe try it
-                sendDataToDashbord({prediction: predictedSection, actual: LeavedSection, carNum: carNum}); 
+                sendDataToDashbord({prediction: result[0].prediction, actual: LeavedSection, carNum: carNum}); 
                 //db.close();
             })
             // ---==== Add The Actual Leaved Section of Car ====-----

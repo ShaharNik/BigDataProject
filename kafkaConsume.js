@@ -111,7 +111,16 @@ consumer.on("data", function (m) {
       obj.prediction = Math.round(pred);
       if (obj.prediction == 0 || obj.prediction == null) {
         console.log("Predicted is not updated yet !! !")
-        plaster.plaster();
+        console.log("Plaster was needed and activated"); // plaster
+        if (obj.type == "Truck") {
+            obj.prediction = 2;
+          }
+          else if (obj.type == "Private") {
+            obj.prediction = 5;
+          }
+          else {
+            obj.prediction = Math.floor(Math.random() * 5) + 1
+          }
       }
       dataModel.CreateEvent(obj.action, obj.carNum, obj.section, obj.prediction, obj.type, obj.day, obj.hour, obj.isSpecial, (data) => { ioClient.emit('car entered', data) });
       // const localModel = new bigml.LocalModel('model/60f7d379cb4f96592d0d4475', connection);

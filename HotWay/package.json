@@ -1,0 +1,34 @@
+{
+  "name": "arieldemo2020",
+  "version": "1.0.0",
+  "description": "<div>In this project we use:</div>\r  <br>\r  <ul>\r <li>Kafka</li>\r  <li>Node.js</li>\r  <li>ejs</li>\r  <li>MongoDB</li>\r  <li>Redis</li>\r  <li>Docker</li>\r  <li>ML Process</li>\r </ul>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bigml": "^1.22.2",
+    "body-parser": "^1.19.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "kafka-node": "^5.0.0",
+    "mongodb": "^3.6.10",
+    "node-rdkafka": "^2.8.1",
+    "nodemon": "^2.0.12",
+    "redis": "^3.1.2",
+    "socket.io": "^2.4.1",
+    "utf-8-validate": "^5.0.2",
+    "uuid": "^8.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShaharNik/BigDataProject.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ShaharNik/BigDataProject/issues"
+  },
+  "homepage": "https://github.com/ShaharNik/BigDataProject#readme"
+}

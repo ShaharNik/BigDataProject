@@ -1,0 +1,217 @@
+<html>
+
+<head>
+    <!--
+        https://medium.com/@noufel.gouirhate/build-a-simple-chat-app-with-node-js-and-socket-io-ea716c093088xc
+        https://hmh.engineering/experimenting-with-apache-kafka-and-nodejs-5c0604211196
+        https://www.sitepoint.com/using-redis-node-js/
+    -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <script>
+        function initSocket() {
+            //socket is global
+            socket = io.connect();
+            //alert("connected");
+        }
+        // function sendMessage(total) {
+        //     socket.emit("totalWaitingCalls", { totalWaiting: total });
+        // }
+    </script>
+    <script>
+        function startListenForEvents() {
+            var table = document.getElementById('confusionMatrixTable');
+            //var carNum = 1;
+            socket.on('car entered', function (predAndCar) {
+                //alert("Car entered!!!")
+                if (predAndCar)
+                    console.log(predAndCar);
+                else
+                    alert("problem!!!")
+
+                if (predAndCar.prediction < 1) {
+                    alert("found problem! Dividing by zero");
+                    console.log("prediction cant be zero");
+                }
+                else {
+                    var ul = document.getElementById("dynamic-list");
+                    //var candidate = document.getElementById("candidate");
+                    var li = document.createElement("li");
+                    li.setAttribute('id', predAndCar.carNum);
+                    li.appendChild(document.createTextNode("CarNum: " + predAndCar.carNum + " Entered Road," + " predicted to leave at section: " + predAndCar.prediction));
+                    li.style.color = "blue";
+                    ul.appendChild(li);
+                }
+            });
+            socket.on('car leaved', function (predActualAndCar) {
+                //alert("Car leaved!!!")
+                console.log(predActualAndCar); // contain json of pred and car number
+                var ul = document.getElementById("dynamic-list");
+                var li = document.getElementById(predActualAndCar.carNum);
+                if (li != null) { // If still Exist and not deleted
+                    if (predActualAndCar.actual == predActualAndCar.prediction) {
+                        li.style.color = "green";
+                    }
+                    else {
+                        li.style.color = "red";
+                    }
+                    li.append(" Actual Leaved Section: " + predActualAndCar.actual)
+                }
+
+                //ul.removeChild(item);
+                if (predActualAndCar.actual < 1 || predActualAndCar.prediction < 1) {
+                    //alert("found problem! Dividing by zero");
+                    console.log("found problem! Dividing by zero");
+                }
+                else {
+                    // need to ++ the confusion matrix table in col: predicted, and row: actual ++
+                    //predActualAndCar.predicted = 1;
+                    var x = table.rows[predActualAndCar.actual].cells[predActualAndCar.prediction].innerHTML;
+                    table.rows[predActualAndCar.actual].cells[predActualAndCar.prediction].innerHTML = ++x;
+                    CheckAccuracy();
+                }
+            });
+        }
+    </script>
+    <script>
+        function clearCarsRecords() {
+            var ul = document.getElementById("dynamic-list");
+            ul.innerHTML = "";
+            // while (ul.firstChild) {
+            //     ul.removeChild(root.firstChild);
+            // }
+        }
+    </script>
+    <script>
+        function trainDataInBigML() {
+            alert("Reading all data from Mongo TO CSV");
+            const trainBut = document.getElementById("trainData");
+            trainBut.disabled = true;
+            setTimeout(() => {
+                trainBut.disabled = false;
+            }, 8000)
+            socket.emit("train data");
+        }
+    </script>
+    <script>
+        function ResetValues() {
+            alert("HERE");
+            var table = document.getElementById('confusionMatrixTable');
+            for (var r = 1, n = table.rows.length; r < n; r++) {
+                for (var c = 1, m = table.rows[r].cells.length; c < m; c++) {
+                    table.rows[r].cells[c].innerHTML = r + " " + c;
+                }
+            }
+        }
+
+        function CheckAccuracy() {
+            //alert("Entered CheckAccuracy func");
+            var table = document.getElementById('confusionMatrixTable');
+            var totalPredictions = 0;
+            var CurrectPredictions = 0; // The diagonal of matrix
+            var accuracy = 0;
+            for (var r = 1, n = table.rows.length; r < n; r++) {
+                for (var c = 1, m = table.rows[r].cells.length; c < m; c++) {
+                    totalPredictions += parseInt(table.rows[r].cells[c].innerHTML);
+                    console.log("totalPredictions: " + totalPredictions);
+                    if (r == c) // diagonal: predicted = actual
+                    {
+                        CurrectPredictions += parseInt(table.rows[r].cells[r].innerHTML) // r = c
+                        console.log("CurrectPredictions: " + CurrectPredictions);
+                    }
+                }
+            }
+            if (totalPredictions != 0) {
+                accuracy = CurrectPredictions / totalPredictions;
+                //alert("accuracy is: " + accuracy) 
+                console.log("accuracy is: " + accuracy);
+                socket.emit("accuracy", accuracy); // maybe just console log accuracy?
+            }
+            else {
+                //alert("Unable to check accuracy! Check the values!")
+                console.log("Unable to check accuracy! Check the values!");
+            }
+            const element = document.getElementById("AccuracyText");
+            element.innerHTML = "Accuracy: " + accuracy;
+        }
+
+        function deleteRow(row) {
+            var i = row.rowIndex;
+            document.getElementById('confusionMatrixTable').deleteRow(i);
+        }
+
+
+    </script>
+</head>
+
+<body onload="initSocket()">
+    <! –– <input type="button" value="Set" onclick="sendMessage(total.value)" />
+    &nbsp;
+    <hr>
+    <form id="form" action="">
+        <table id="confusionMatrixTable" border="1"
+            style="background-color: burlywood; margin-left: auto; margin-right: auto; width: 80%; height: 70px; text-align: center;">
+            <caption>Predicted Section</caption>
+            <tr>
+                <td rowspan="6" style="width: 15%;">Actual Leave Section:</td>
+                <th> </th>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+            </tr>
+            <tr>
+                <th>1</th>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <th>2</th>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <th>3</th>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <th>4</th>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <th>5</th>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+        </table>
+        <h4 id="AccuracyText" style="text-align: center;">Accuracy: </h1>
+            <input type="button" id="startListen" onclick="startListenForEvents()" value="Start Listen"
+                style="text-align: center; " />
+            <input type="button" id="trainData" onclick="trainDataInBigML()" value="Train Data"
+                style="text-align: center; " />
+            <input type="button" id="clearRecords" onclick="clearCarsRecords()" value="Clear Records"
+                style="text-align: center; " />
+            <! –– <input type="button" id="StopAndAcc" onclick="CheckAccuracy()" value="Show Accuracy"
+                style="text-align: center; " />
+            <ul id="dynamic-list"></ul>
+    </form>
+</body>
+
+</html>

@@ -6,14 +6,15 @@ const dataModel = require('../MongoAtlas/myMongo');
 var bigModel = require('../bigML/bigML')
 
 // -= Socket =-
-const express = require('express'); // check id can delete
-const app = express();
-var server = require('http').createServer(app);
-const io = require("socket.io")(server);
-
+// const express = require('express'); // check id can delete
+// const app = express();
+// var server = require('http').createServer(app);
+// const io = require("socket.io")(server);
+io = require("socket.io-client");
+ioClient = io.connect("http://localhost:3000");
 kafkaConsumer.consumer.on("data", function (m) {
-  //console.log("Recieved Message: ");
-  //console.log(m.value.toString()); 
+  console.log("Recieved Message: ", m.value.toString());
+  // console.log(m.value.toString()); 
   const obj = JSON.parse(m.value.toString());
   //  console.log(obj.id);
   // console.log(obj.carNum); 

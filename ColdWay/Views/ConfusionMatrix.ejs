@@ -141,77 +141,178 @@
 
 
     </script>
+    <title>Confusion Matrix</title>
+    <link rel="stylesheet" href="./vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="./vendors/css/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="./vendors/flag-icon-css/css/flag-icon.min.css">
+    <link rel="stylesheet" href="./vendors/jvectormap/jquery-jvectormap.css">
+    <!-- End plugin css for this page -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="./css/demo/style.css">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="./images/favicon.png" />
+    <script src="https://kit.fontawesome.com/466c3a2ea6.js" crossorigin="anonymous"></script>
 </head>
 
 <body onload="initSocket()">
-    <! –– <input type="button" value="Set" onclick="sendMessage(total.value)" />
-    &nbsp;
-    <hr>
-    <form id="form" action="">
-        <table id="confusionMatrixTable" border="1"
-            style="background-color: burlywood; margin-left: auto; margin-right: auto; width: 80%; height: 70px; text-align: center;">
-            <caption>Predicted Section</caption>
-            <tr>
-                <td rowspan="6" style="width: 15%;">Actual Leave Section:</td>
-                <th> </th>
-                <th>1</th>
-                <th>2</th>
-                <th>3</th>
-                <th>4</th>
-                <th>5</th>
-            </tr>
-            <tr>
-                <th>1</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-            </tr>
-            <tr>
-                <th>2</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-            </tr>
-            <tr>
-                <th>3</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-            </tr>
-            <tr>
-                <th>4</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-            </tr>
-            <tr>
-                <th>5</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-            </tr>
-        </table>
-        <h4 id="AccuracyText" style="text-align: center;">Accuracy: </h1>
-            <input type="button" id="startListen" onclick="startListenForEvents()" value="Start Listen"
-                style="text-align: center; " />
-            <input type="button" id="trainData" onclick="trainDataInBigML()" value="Train Data"
-                style="text-align: center; " />
-            <input type="button" id="clearRecords" onclick="clearCarsRecords()" value="Clear Records"
-                style="text-align: center; " />
-            <! –– <input type="button" id="StopAndAcc" onclick="CheckAccuracy()" value="Show Accuracy"
-                style="text-align: center; " />
-            <ul id="dynamic-list"></ul>
-    </form>
+    <div class="body-wrapper">
+
+        <!-- partial:partials/_sidebar.html -->
+        <aside class="mdc-drawer mdc-drawer--dismissible mdc-drawer--open">
+            <div class="mdc-drawer__header">
+                <a href="index.html" class="brand-logo">
+                    <img src="./images/ArielLogo.png" alt="logo" width="168px">
+                </a>
+            </div>
+            <div class="mdc-drawer__content">
+                <div class="mdc-list-group">
+                    <nav class="mdc-list mdc-drawer-menu">
+                        <div class="mdc-list-item mdc-drawer-item">
+                            <a class="mdc-drawer-link" href="http://localhost:3001/Dashboard">
+                                <i class="material-icons mdc-list-item__start-detail mdc-drawer-item-icon"
+                                    aria-hidden="true">home</i>
+                                Dashboard
+                            </a>
+                        </div>
+
+                        <div class="mdc-list-item mdc-drawer-item">
+                            <a class="mdc-drawer-link" href="http://localhost:3002/ConfusionMatrix">
+                                <i class="material-icons mdc-list-item__start-detail mdc-drawer-item-icon"
+                                    aria-hidden="true">grid_on</i>
+                                Confusion Matrix
+                            </a>
+                        </div>
+                    </nav>
+                </div>
+
+            </div>
+        </aside>
+        <!-- partial -->
+        <div class="main-wrapper mdc-drawer-app-content">
+            <!-- partial:partials/_navbar.html -->
+            <header class="mdc-top-app-bar">
+                <div class="mdc-top-app-bar__row">
+                    <div class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+                        <button
+                            class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button sidebar-toggler">menu</button>
+                        <span class="mdc-top-app-bar__title">Real-time data information and analysis system on toll
+                            road</span>
+
+                    </div>
+
+                </div>
+            </header>
+            <!-- partial -->
+            <div class="page-wrapper mdc-toolbar-fixed-adjust">
+                <main class="content-wrapper">
+                    <form id="form" action="">
+                        <table id="confusionMatrixTable" border="1"
+                            style="background-color: burlywood; margin-left: auto; margin-right: auto; width: 80%; height: 70px; text-align: center;">
+                            <caption>Predicted Section</caption>
+                            <tr>
+                                <td rowspan="6" style="width: 15%;">Actual Leave Section:</td>
+                                <th> </th>
+                                <th>1</th>
+                                <th>2</th>
+                                <th>3</th>
+                                <th>4</th>
+                                <th>5</th>
+                            </tr>
+                            <tr>
+                                <th>1</th>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <th>2</th>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <th>3</th>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <th>4</th>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <th>5</th>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                        </table>
+                        <h4 id="AccuracyText" style="text-align: center;">Accuracy: </h1>
+                            <input type="button" id="startListen" onclick="startListenForEvents()" value="Start Listen"
+                                style="text-align: center; " />
+                            <input type="button" id="trainData" onclick="trainDataInBigML()" value="Train Data"
+                                style="text-align: center; " />
+                            <input type="button" id="clearRecords" onclick="clearCarsRecords()" value="Clear Records"
+                                style="text-align: center; " />
+                            <! –– <input type="button" id="StopAndAcc" onclick="CheckAccuracy()" value="Show Accuracy"
+                                style="text-align: center; " />
+                            <ul id="dynamic-list"></ul>
+                    </form>
+                </main>
+                <footer>
+                    <div class="mdc-layout-grid">
+                        <div class="mdc-layout-grid__inner">
+                            <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-6-desktop">
+                                <span class="text-center text-sm-left d-block d-sm-inline-block tx-14">Copyright © <a
+                                        href="https://www.bootstrapdash.com/" target="_blank">bootstrapdash.com
+                                    </a>2021</span>
+                            </div>
+                            <div
+                                class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-6-desktop d-flex justify-content-end">
+                                <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center tx-14">Free <a
+                                        href="https://www.bootstrapdash.com/material-design-dashboard/" target="_blank">
+                                        material admin </a>
+                                    dashboards from Bootstrapdash.com</span>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <!-- partial -->
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- plugins:js -->
+    <script src="./vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page-->
+    <script src="./vendors/chartjs/Chart.min.js"></script>
+    <script src="./vendors/jvectormap/jquery-jvectormap.min.js"></script>
+    <script src="./vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <!-- End plugin js for this page-->
+    <!-- inject:js -->
+    <script src="./js/material.js"></script>
+    <script src="./js/misc.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="./js/dashboard.js"></script>
+
 </body>
 
 </html>

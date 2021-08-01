@@ -2,17 +2,19 @@ const express = require('express');
 const app = express();
 var server = require('http').createServer(app);
 const io = require("socket.io")(server);
-const port = 3000;
+const port = 3002;
 
 app.set('view engine', 'ejs');
 app.use(express.static("public"));
 
 //------------ kafka------------
-const kafka = require('./Kafka/kafkaProduce');
+// const kafka = require('./Kafka/kafkaProduce');
 
 // -==== Cold Way -====
 const ColdWay = require('./ColdWay/ColdWayController');
-app.get('/', (req, res) => res.render('ConfusionMatrix')); // CM instead of Sender
+app.get('/ConfusionMatrix', (req, res) => res.render('ConfusionMatrix'));
+
+// app.get('/ConfusionMatrix', (req, res) => res.render('ConfusionMatrix')); // CM instead of Sender
 //------------ Socket.io ----------------
 io.on("connection", (socket) => {
   console.log("new user connected");

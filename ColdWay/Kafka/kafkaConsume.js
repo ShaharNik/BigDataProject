@@ -3,30 +3,23 @@ const Kafka = require("node-rdkafka");
 
 const kafkaConf = {
   "group.id": "cloudkarafka-example",
-  // -= instance 1 =-
-  //"metadata.broker.list": "glider-01.srvs.cloudkafka.com:9094,glider-02.srvs.cloudkafka.com:9094,glider-03.srvs.cloudkafka.com:9094".split(","),
-
-  // -= instance 2 =-
-  "metadata.broker.list": "dory-01.srvs.cloudkafka.com:9094,dory-02.srvs.cloudkafka.com:9094,dory-03.srvs.cloudkafka.com:9094".split(","),
-
+  // "metadata.broker.list": "glider-01.srvs.cloudkafka.com:9094,glider-02.srvs.cloudkafka.com:9094,glider-03.srvs.cloudkafka.com:9094".split(","),
+  // "metadata.broker.list": "dory-01.srvs.cloudkafka.com:9094,dory-02.srvs.cloudkafka.com:9094,dory-03.srvs.cloudkafka.com:9094".split(","),
+  "metadata.broker.list": "sulky-03.srvs.cloudkafka.com:9094,sulky-01.srvs.cloudkafka.com:9094,sulky-02.srvs.cloudkafka.com:9094".split(","),
   "socket.keepalive.enable": true,
   "security.protocol": "SASL_SSL",
   "sasl.mechanisms": "SCRAM-SHA-256",
-  // -= instance 1 =-
-  //"sasl.username": "f3roe3re",
-  //"sasl.password": "cDkjUdvtxxv4HZJmSAKLGzz7cdW6JpPV",
-
-  // -= instance 2 =-
-  "sasl.username": "25rvtceg",
-  "sasl.password": "oh-CeZsSiWvmvN4g7-IswIgcTAR5d2Xt",
-
+  // "sasl.username": "f3roe3re",
+  // "sasl.password": "cDkjUdvtxxv4HZJmSAKLGzz7cdW6JpPV",
+  // "sasl.username": "25rvtceg",
+  // "sasl.password": "oh-CeZsSiWvmvN4g7-IswIgcTAR5d2Xt",
+  "sasl.username": "rfdvmgdr",
+  "sasl.password": "780OQ1O45asS510VVMx-rK_HoCYcNxRh",
   "debug": "generic,broker,security"
 };
-// -= instance 1 =-
-//const prefix = "f3roe3re-";
-
-// -= instance 2 =-
-const prefix = "25rvtceg-";
+// const prefix = "f3roe3re-";
+// const prefix = "25rvtceg-";
+const prefix = "rfdvmgdr-";
 const topic = `${prefix}carsEvents`;
 
 //const prefix = process.env.CLOUDKARAFKA_USERNAME;

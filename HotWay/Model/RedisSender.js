@@ -11,7 +11,7 @@ function CarEnterSection(carNumber, section) {
     var section = 'section' + JSON.stringify(section);
     // redisClient.sadd(section, carNumber);
     redisClient.sadd(section, carNumber, function (err, reply) {
-        console.log(reply);
+        // console.log(reply);
     });
 }
 function CarLeaveSection(carNumber) {

@@ -3,36 +3,43 @@ var app = require('express')();
 var server = require('http').Server(app);
 var redis = require('redis');
 var redisClient = redis.createClient();
-var sub = redis.createClient()
+io = require("socket.io");
+ioServer = io(65530);
 
-function GetSectionsCarNumbers(){
+const { promisify } = require("util");
 
-}
+ioServer.on("connection", (socket) => {
+    console.log("new user connected");
+    socket.on("getCarsList", (sec) => {
+        console.log(sec);
+        GetCarList(sec);
+    });
 
-
-// // catch 404 and forward to error handler
-// app.use(function(req, res, next) {
-//     var err = new Error('Not Found');
-//     err.status = 404;
-//     next(err);
-// });
-
-// // no stacktraces leaked to user
-// app.use(function(err, req, res, next) {
-//     res.status(err.status || 500);
-//     res.render('error', {
-//         message: err.message,
-//         error: {}
-//     });
-// });
-
-redisClient.on('connect', function() {
-    console.log('Reciver connected to Redis');
 });
 
+function GetSectionsCarNumbers(section) {
+    let result = 0;
+    const sectionTitle = 'section' + JSON.stringify(section);
 
-// server.listen(6061, function() {
-//     console.log('reciver is running on port 6061');
-// });
+
+    const runApplication = async () => {
+        const client = redis.createClient();
+        const scardAsync = promisify(client.scard).bind(client);
+        const carsNum = await scardAsync(sectionTitle);
+        ioServer.emit("updateSections", { section: sectionTitle, carsNum: carsNum });
+    };
+
+    runApplication();
+}
+
+function GetCarList(section) {
+    redisClient.smembers(section, function (err, reply) {
+        ioServer.emit("carList", reply);
+    });
+}
+
+redisClient.on('connect', function () {
+    console.log('Reciver connected to Redis');
+});
 
 module.exports = { GetSectionsCarNumbers };

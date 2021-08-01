@@ -1,11 +1,11 @@
-io = require("socket.io-client");
-ioClient = io.connect("http://localhost:3000"); // why need this?!
+// io = require("socket.io-client");
+// ioClient = io.connect("http://localhost:3000"); // why need this?!
 
 
 module.exports.GenerateData= async function (publish2Kafka) 
 {
-    const minWait = 300;
-    const maxWait = 500;
+    const minWait = 1000;
+    const maxWait = 1500;
     const MaxEvents = 5;
 
     var type = ['Private', 'Truck', 'Commercial']; // private , מסחרי, משאית 

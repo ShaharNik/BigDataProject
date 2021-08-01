@@ -7,7 +7,8 @@ app.set('view engine', 'ejs');
 app.use(express.static("public"));
 
 const HotWay = require('./Controller/HotWayController');
-const data = {
+
+app.get('/', (req, res) => res.render('Dashboard', data = {
     sections: [
         {
             Id: "section1",
@@ -30,8 +31,8 @@ const data = {
             SectionTitle: "מקטע 5"
         }
     ]
-};
-app.get('/', (req, res) => res.render('Dashboard', data));
+}
+));
 
 server.listen(port, () => console.log(`Ariel app listening at http://localhost:${port}`));
 

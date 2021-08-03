@@ -1,24 +1,18 @@
 
 const kafkaConsumer = require('../kafka/kafkaConsume');
-// -= mongo =-
+// -= Mongo =-
 const dataModel = require('../MongoAtlas/myMongo');
 // --== BigML ==--
 var bigModel = require('../bigML/bigML')
 
 // -= Socket =-
-// const express = require('express'); // check id can delete
-// const app = express();
-// var server = require('http').createServer(app);
-// const io = require("socket.io")(server);
-io = require("socket.io-client");
-ioClient = io.connect("http://localhost:3000");
+ io = require("socket.io");
+ ioClient = io(3003);
+
 kafkaConsumer.consumer.on("data", function (m) {
   console.log("Recieved Message: ", m.value.toString());
   // console.log(m.value.toString()); 
   const obj = JSON.parse(m.value.toString());
-  //  console.log(obj.id);
-  // console.log(obj.carNum); 
-  //  console.log("===----====----===");
   if (obj.action == "EnterRoad") {
 
     // carnum, section, prediction, type, day, hour, isspecial
@@ -26,9 +20,9 @@ kafkaConsumer.consumer.on("data", function (m) {
     var pred = bigModel.MyBigML_Model_Prediction(obj.section, obj.prediction, obj.type, obj.day, obj.hour, obj.isSpecial);
     console.log(pred)
     obj.prediction = Math.round(pred);
-    if (obj.prediction == 0 || obj.prediction == null) {
-      console.log("Predicted is not updated yet !! !")
-      console.log("Plaster was needed and activated"); // plaster
+    if (obj.prediction == 0 || obj.prediction == null) 
+    {
+      console.log("*****************Predicted is not generated yet...")
       if (obj.type == "Truck") {
         obj.prediction = 2;
       }

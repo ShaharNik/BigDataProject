@@ -10,13 +10,11 @@
     <script>
         function initSocket() {
             //socket is global
-            socket = io.connect();
+            socket = io.connect("http://localhost:3003");
             //alert("connected");
         }
-        // function sendMessage(total) {
-        //     socket.emit("totalWaitingCalls", { totalWaiting: total });
-        // }
     </script>
+    
     <script>
         function startListenForEvents() {
             var table = document.getElementById('confusionMatrixTable');
@@ -28,9 +26,9 @@
                 else
                     alert("problem!!!")
 
-                if (predAndCar.prediction < 1) {
-                    alert("found problem! Dividing by zero");
-                    console.log("prediction cant be zero");
+                if (predAndCar.prediction < 1 || predAndCar.carNum == null) {
+                    alert("found problem: predAndCar");
+                    console.log("prediction or carNum cant be zero or NULL");
                 }
                 else {
                     var ul = document.getElementById("dynamic-list");
@@ -71,6 +69,11 @@
                 }
             });
         }
+
+        function StopListenToEvents() {
+                socket.removeAllListeners("car entered");
+                socket.removeAllListeners("car leaved");
+            }
     </script>
     <script>
         function clearCarsRecords() {
@@ -91,16 +94,23 @@
             }, 8000)
             socket.emit("train data");
         }
+        function clearCarsRecords() {
+            var ul = document.getElementById("dynamic-list");
+            ul.innerHTML = "";
+            // while (ul.firstChild) {
+            //     ul.removeChild(root.firstChild);
+            // }
+        }
     </script>
     <script>
         function ResetValues() {
-            alert("HERE");
             var table = document.getElementById('confusionMatrixTable');
             for (var r = 1, n = table.rows.length; r < n; r++) {
                 for (var c = 1, m = table.rows[r].cells.length; c < m; c++) {
-                    table.rows[r].cells[c].innerHTML = r + " " + c;
+                    table.rows[r].cells[c].innerHTML = 0;
                 }
             }
+            CheckAccuracy();
         }
 
         function CheckAccuracy() {
@@ -197,9 +207,7 @@
                     <div class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
                         <button
                             class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button sidebar-toggler">menu</button>
-                        <span class="mdc-top-app-bar__title">Real-time data information and analysis system on toll
-                            road</span>
-
+                        <span class="mdc-top-app-bar__title">Confusion Matrix - Predicting exit sections of incoming vehicles</span>
                     </div>
 
                 </div>
@@ -208,8 +216,8 @@
             <div class="page-wrapper mdc-toolbar-fixed-adjust">
                 <main class="content-wrapper">
                     <form id="form" action="">
-                        <table id="confusionMatrixTable" border="1"
-                            style="background-color: burlywood; margin-left: auto; margin-right: auto; width: 80%; height: 70px; text-align: center;">
+                        <table id="confusionMatrixTable"  border="1"
+                            style="background-color: rgb(123, 212, 235); border:1px solid black; margin-left: auto; margin-right: auto; width: 80%; height: 70px; text-align: center;">
                             <caption>Predicted Section</caption>
                             <tr>
                                 <td rowspan="6" style="width: 15%;">Actual Leave Section:</td>
@@ -267,6 +275,10 @@
                             <input type="button" id="trainData" onclick="trainDataInBigML()" value="Train Data"
                                 style="text-align: center; " />
                             <input type="button" id="clearRecords" onclick="clearCarsRecords()" value="Clear Records"
+                                style="text-align: center; " />
+                                <input type="button" id="clearMatrix" onclick="ResetValues()" value="Clear Matrix"
+                                style="text-align: center; " />
+                            <input type="button" id="StopListenEvents" onclick="StopListenToEvents()" value="Stop Listen"
                                 style="text-align: center; " />
                             <! –– <input type="button" id="StopAndAcc" onclick="CheckAccuracy()" value="Show Accuracy"
                                 style="text-align: center; " />

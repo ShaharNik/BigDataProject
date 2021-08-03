@@ -34,7 +34,8 @@ const genMessage = m => new Buffer.alloc(m.length, m);
 producer.on("ready", function (arg) {
   console.log(`producer Ariel is ready.`);
   console.log("Activating simulator..")
-  myProducer.GenerateData(publish2Kafka);
+  //myProducer.GenerateData(publish2Kafka);
+  setInterval(function () { myProducer.GenerateData(publish2Kafka) }, 3000)
 });
 producer.connect();
 //publish is a name can be any name...

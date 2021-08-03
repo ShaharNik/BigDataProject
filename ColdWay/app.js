@@ -13,6 +13,8 @@ app.use(express.static("public"));
 // -==== Cold Way -====
 const ColdWay = require('./ColdWay/ColdWayController');
 app.get('/ConfusionMatrix', (req, res) => res.render('ConfusionMatrix'));
+// -= Mongo =-
+const dataModel = require('./MongoAtlas/myMongo');
 
 // app.get('/ConfusionMatrix', (req, res) => res.render('ConfusionMatrix')); // CM instead of Sender
 //------------ Socket.io ----------------

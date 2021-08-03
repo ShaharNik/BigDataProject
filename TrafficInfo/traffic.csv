@@ -1,0 +1,788 @@
+﻿{
+    "traffic": [
+        {
+            "vehicle type": "truck",
+            "day": "sunday",
+            "Time": "05:00-09:00",
+            "Entry Point": "2",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "monday",
+            "Time": "09:00-12:00",
+            "Entry Point": "3",
+            "Exit Point": "4"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "wednesday",
+            "Time": "14:00-17:00",
+            "Entry Point": "3",
+            "Exit Point": "4"
+        },
+        {
+            "vehicle type": "private",
+            "day": "wednesday",
+            "Time": "05:00-09:00",
+            "Entry Point": "3",
+            "Exit Point": "1"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "monday",
+            "Time": "12:00-14:00",
+            "Entry Point": "4",
+            "Exit Point": "1"
+        },
+        {
+            "vehicle type": "private",
+            "day": "monday",
+            "Time": "05:00-09:00",
+            "Entry Point": "3",
+            "Exit Point": "4"
+        },
+        {
+            "vehicle type": "private",
+            "day": "friday",
+            "Time": "02:00-05:00",
+            "Entry Point": "3",
+            "Exit Point": "4"
+        },
+        {
+            "vehicle type": "private",
+            "day": "wednesday",
+            "Time": "23:00-02:00",
+            "Entry Point": {"$or":[1,2,3,4,5]},
+            "Exit Point": {"$or":[1,2,3,4,5]}
+        },
+        {
+            "vehicle type": "private",
+            "day": "thursday",
+            "Time": "09:00-12:00",
+            "Entry Point": "2",
+            "Exit Point": "1"
+        },
+        {
+            "vehicle type": "private",
+            "day": "tuesday",
+            "Time": "02:00-05:00",
+            "Entry Point": "5",
+            "Exit Point": "1"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "wednesday",
+            "Time": "05:00-09:00",
+            "Entry Point": "4",
+            "Exit Point": "5"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "wednesday",
+            "Time": "09:00-12:00",
+            "Entry Point": "3",
+            "Exit Point": "1"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "thursday",
+            "Time": "20:00-23:00",
+            "Entry Point": "4",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "sunday",
+            "Time": "20:00-23:00",
+            "Entry Point": "5",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "tuesday",
+            "Time": "20:00-23:00",
+            "Entry Point": {"$or":[1,2,3,4,5]},
+            "Exit Point": {"$or":[1,2,3,4,5]}
+        },
+        {
+            "vehicle type": "private",
+            "day": "monday",
+            "Time": "02:00-05:00",
+            "Entry Point": {"$or":[1,2,3,4,5]},
+            "Exit Point": {"$or":[1,2,3,4,5]}
+        },
+        {
+            "vehicle type": "private",
+            "day": "sunday",
+            "Time": "12:00-14:00",
+            "Entry Point": "2",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "private",
+            "day": "tuesday",
+            "Time": "14:00-17:00",
+            "Entry Point": "2",
+            "Exit Point": "4"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "friday",
+            "Time": "09:00-12:00",
+            "Entry Point": "1",
+            "Exit Point": "5"
+        },
+        {
+            "vehicle type": "private",
+            "day": "friday",
+            "Time": "12:00-14:00",
+            "Entry Point": "5",
+            "Exit Point": "2"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "monday",
+            "Time": "20:00-23:00",
+            "Entry Point": "4",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "private",
+            "day": "saturday",
+            "Time": "12:00-14:00",
+            "Entry Point": "1",
+            "Exit Point": "2"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "sunday",
+            "Time": "14:00-17:00",
+            "Entry Point": "4",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "private",
+            "day": "wednesday",
+            "Time": "20:00-23:00",
+            "Entry Point": "4",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "thursday",
+            "Time": "05:00-09:00",
+            "Entry Point": "2",
+            "Exit Point": "1"
+        },
+        {
+            "vehicle type": "private",
+            "day": "thursday",
+            "Time": "02:00-05:00",
+            "Entry Point": "1",
+            "Exit Point": "5"
+        },
+        {
+            "vehicle type": "private",
+            "day": "sunday",
+            "Time": "09:00-12:00",
+            "Entry Point": "1",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "friday",
+            "Time": "05:00-09:00",
+            "Entry Point": "2",
+            "Exit Point": "4"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "monday",
+            "Time": "02:00-05:00",
+            "Entry Point": {"$or":[1,2,3,4,5]},
+            "Exit Point": {"$or":[1,2,3,4,5]}
+        },
+        {
+            "vehicle type": "private",
+            "day": "thursday",
+            "Time": "17:00-20:00",
+            "Entry Point": "4",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "saturday",
+            "Time": "09:00-12:00",
+            "Entry Point": {"$or":[1,2,3,4,5]},
+            "Exit Point": {"$or":[1,2,3,4,5]}
+        },
+        {
+            "vehicle type": "private",
+            "day": "monday",
+            "Time": "20:00-23:00",
+            "Entry Point": "1",
+            "Exit Point": "5"
+        },
+        {
+            "vehicle type": "private",
+            "day": "thursday",
+            "Time": "12:00-14:00",
+            "Entry Point": {"$or":[1,2,3,4,5]},
+            "Exit Point": {"$or":[1,2,3,4,5]}
+        },
+        {
+            "vehicle type": "private",
+            "day": "tuesday",
+            "Time": "09:00-12:00",
+            "Entry Point": "1",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "private",
+            "day": "saturday",
+            "Time": "20:00-23:00",
+            "Entry Point": {"$or":[1,2,3,4,5]},
+            "Exit Point": {"$or":[1,2,3,4,5]}
+        },
+        {
+            "vehicle type": "private",
+            "day": "sunday",
+            "Time": "23:00-02:00",
+            "Entry Point": "3",
+            "Exit Point": "2"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "thursday",
+            "Time": "02:00-05:00",
+            "Entry Point": "3",
+            "Exit Point": "2"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "saturday",
+            "Time": "20:00-23:00",
+            "Entry Point": {"$or":[1,2,3,4,5]},
+            "Exit Point": {"$or":[1,2,3,4,5]}
+        },
+        {
+            "vehicle type": "truck",
+            "day": "wednesday",
+            "Time": "17:00-20:00",
+            "Entry Point": "5",
+            "Exit Point": "4"
+        },
+        {
+            "vehicle type": "private",
+            "day": "tuesday",
+            "Time": "23:00-02:00",
+            "Entry Point": "2",
+            "Exit Point": "5"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "tuesday",
+            "Time": "02:00-05:00",
+            "Entry Point": "2",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "private",
+            "day": "sunday",
+            "Time": "14:00-17:00",
+            "Entry Point": "2",
+            "Exit Point": "5"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "wednesday",
+            "Time": "02:00-05:00",
+            "Entry Point": "4",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "private",
+            "day": "tuesday",
+            "Time": "17:00-20:00",
+            "Entry Point": "5",
+            "Exit Point": "4"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "monday",
+            "Time": "23:00-02:00",
+            "Entry Point": "1",
+            "Exit Point": "4"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "tuesday",
+            "Time": "12:00-14:00",
+            "Entry Point": "1",
+            "Exit Point": "4"
+        },
+        {
+            "vehicle type": "private",
+            "day": "monday",
+            "Time": "17:00-20:00",
+            "Entry Point": "4",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "monday",
+            "Time": "05:00-09:00",
+            "Entry Point": "1",
+            "Exit Point": "2"
+        },
+        {
+            "vehicle type": "private",
+            "day": "monday",
+            "Time": "23:00-02:00",
+            "Entry Point": "2",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "thursday",
+            "Time": "14:00-17:00",
+            "Entry Point": "2",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "thursday",
+            "Time": "23:00-02:00",
+            "Entry Point": "1",
+            "Exit Point": "4"
+        },
+        {
+            "vehicle type": "private",
+            "day": "wednesday",
+            "Time": "09:00-12:00",
+            "Entry Point": "3",
+            "Exit Point": "4"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "saturday",
+            "Time": "23:00-02:00",
+            "Entry Point": {"$or":[1,2,3,4,5]},
+            "Exit Point": {"$or":[1,2,3,4,5]}
+        },
+        {
+            "vehicle type": "truck",
+            "day": "friday",
+            "Time": "12:00-14:00",
+            "Entry Point": "3",
+            "Exit Point": "2"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "friday",
+            "Time": "20:00-23:00",
+            "Entry Point": "5",
+            "Exit Point": "1"
+        },
+        {
+            "vehicle type": "private",
+            "day": "monday",
+            "Time": "09:00-12:00",
+            "Entry Point": "5",
+            "Exit Point": "1"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "wednesday",
+            "Time": "20:00-23:00",
+            "Entry Point": "1",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "private",
+            "day": "tuesday",
+            "Time": "12:00-14:00",
+            "Entry Point": "3",
+            "Exit Point": "2"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "sunday",
+            "Time": "02:00-05:00",
+            "Entry Point": {"$or":[1,2,3,4,5]},
+            "Exit Point": {"$or":[1,2,3,4,5]}
+        },
+        {
+            "vehicle type": "private",
+            "day": "thursday",
+            "Time": "14:00-17:00",
+            "Entry Point": "5",
+            "Exit Point": "1"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "saturday",
+            "Time": "05:00-09:00",
+            "Entry Point": "1",
+            "Exit Point": "2"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "tuesday",
+            "Time": "09:00-12:00",
+            "Entry Point": "3",
+            "Exit Point": "5"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "friday",
+            "Time": "23:00-02:00",
+            "Entry Point": "2",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "private",
+            "day": "sunday",
+            "Time": "05:00-09:00",
+            "Entry Point": "1",
+            "Exit Point": "4"
+        },
+        {
+            "vehicle type": "private",
+            "day": "friday",
+            "Time": "23:00-02:00",
+            "Entry Point": "2",
+            "Exit Point": "5"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "saturday",
+            "Time": "17:00-20:00",
+            "Entry Point": "4",
+            "Exit Point": "1"
+        },
+        {
+            "vehicle type": "private",
+            "day": "monday",
+            "Time": "12:00-14:00",
+            "Entry Point": "2",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "tuesday",
+            "Time": "23:00-02:00",
+            "Entry Point": "4",
+            "Exit Point": "1"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "saturday",
+            "Time": "12:00-14:00",
+            "Entry Point": "3",
+            "Exit Point": "5"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "friday",
+            "Time": "17:00-20:00",
+            "Entry Point": "4",
+            "Exit Point": "2"
+        },
+        {
+            "vehicle type": "private",
+            "day": "saturday",
+            "Time": "14:00-17:00",
+            "Entry Point": {"$or":[1,2,3,4,5]},
+            "Exit Point": {"$or":[1,2,3,4,5]}
+        },
+        {
+            "vehicle type": "private",
+            "day": "monday",
+            "Time": "14:00-17:00",
+            "Entry Point": "4",
+            "Exit Point": "5"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "sunday",
+            "Time": "23:00-02:00",
+            "Entry Point": "5",
+            "Exit Point": "1"
+        },
+        {
+            "vehicle type": "private",
+            "day": "friday",
+            "Time": "14:00-17:00",
+            "Entry Point": {"$or":[1,2,3,4,5]},
+            "Exit Point": {"$or":[1,2,3,4,5]}
+        },
+        {
+            "vehicle type": "truck",
+            "day": "friday",
+            "Time": "14:00-17:00",
+            "Entry Point": {"$or":[1,2,3,4,5]},
+            "Exit Point": {"$or":[1,2,3,4,5]}
+        },
+        {
+            "vehicle type": "private",
+            "day": "sunday",
+            "Time": "17:00-20:00",
+            "Entry Point": "4",
+            "Exit Point": "1"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "saturday",
+            "Time": "02:00-05:00",
+            "Entry Point": "3",
+            "Exit Point": "4"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "wednesday",
+            "Time": "23:00-02:00",
+            "Entry Point": {"$or":[1,2,3,4,5]},
+            "Exit Point": {"$or":[1,2,3,4,5]}
+        },
+        {
+            "vehicle type": "private",
+            "day": "sunday",
+            "Time": "02:00-05:00",
+            "Entry Point": {"$or":[1,2,3,4,5]},
+            "Exit Point": {"$or":[1,2,3,4,5]}
+        },
+        {
+            "vehicle type": "private",
+            "day": "tuesday",
+            "Time": "20:00-23:00",
+            "Entry Point": {"$or":[1,2,3,4,5]},
+            "Exit Point": {"$or":[1,2,3,4,5]}
+        },
+        {
+            "vehicle type": "truck",
+            "day": "friday",
+            "Time": "02:00-05:00",
+            "Entry Point": "3",
+            "Exit Point": "1"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "thursday",
+            "Time": "17:00-20:00",
+            "Entry Point": "1",
+            "Exit Point": "2"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "sunday",
+            "Time": "12:00-14:00",
+            "Entry Point": "1",
+            "Exit Point": "5"
+        },
+        {
+            "vehicle type": "private",
+            "day": "thursday",
+            "Time": "05:00-09:00",
+            "Entry Point": "3",
+            "Exit Point": "4"
+        },
+        {
+            "vehicle type": "private",
+            "day": "wednesday",
+            "Time": "14:00-17:00",
+            "Entry Point": "2",
+            "Exit Point": "4"
+        },
+        {
+            "vehicle type": "private",
+            "day": "friday",
+            "Time": "09:00-12:00",
+            "Entry Point": "2",
+            "Exit Point": "4"
+        },
+        {
+            "vehicle type": "private",
+            "day": "saturday",
+            "Time": "23:00-02:00",
+            "Entry Point": {"$or":[1,2,3,4,5]},
+            "Exit Point": {"$or":[1,2,3,4,5]}
+        },
+        {
+            "vehicle type": "truck",
+            "day": "sunday",
+            "Time": "09:00-12:00",
+            "Entry Point": "3",
+            "Exit Point": "5"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "monday",
+            "Time": "14:00-17:00",
+            "Entry Point": "2",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "saturday",
+            "Time": "14:00-17:00",
+            "Entry Point": {"$or":[1,2,3,4,5]},
+            "Exit Point": {"$or":[1,2,3,4,5]}
+        },
+        {
+            "vehicle type": "truck",
+            "day": "thursday",
+            "Time": "09:00-12:00",
+            "Entry Point": "3",
+            "Exit Point": "4"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "tuesday",
+            "Time": "14:00-17:00",
+            "Entry Point": "3",
+            "Exit Point": "2"
+        },
+        {
+            "vehicle type": "private",
+            "day": "saturday",
+            "Time": "09:00-12:00",
+            "Entry Point": {"$or":[1,2,3,4,5]},
+            "Exit Point": {"$or":[1,2,3,4,5]}
+        },
+        {
+            "vehicle type": "private",
+            "day": "saturday",
+            "Time": "02:00-05:00",
+            "Entry Point": "4",
+            "Exit Point": "1"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "wednesday",
+            "Time": "12:00-14:00",
+            "Entry Point": "2",
+            "Exit Point": "4"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "thursday",
+            "Time": "12:00-14:00",
+            "Entry Point": {"$or":[1,2,3,4,5]},
+            "Exit Point": {"$or":[1,2,3,4,5]}
+        },
+        {
+            "vehicle type": "truck",
+            "day": "tuesday",
+            "Time": "17:00-20:00",
+            "Entry Point": "1",
+            "Exit Point": "2"
+        },
+        {
+            "vehicle type": "private",
+            "day": "friday",
+            "Time": "20:00-23:00",
+            "Entry Point": "4",
+            "Exit Point": "2"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "monday",
+            "Time": "17:00-20:00",
+            "Entry Point": "2",
+            "Exit Point": "1"
+        },
+        {
+            "vehicle type": "private",
+            "day": "friday",
+            "Time": "17:00-20:00",
+            "Entry Point": "1",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "tuesday",
+            "Time": "05:00-09:00",
+            "Entry Point": "2",
+            "Exit Point": "1"
+        },
+        {
+            "vehicle type": "private",
+            "day": "tuesday",
+            "Time": "05:00-09:00",
+            "Entry Point": "4",
+            "Exit Point": "5"
+        },
+        {
+            "vehicle type": "private",
+            "day": "saturday",
+            "Time": "17:00-20:00",
+            "Entry Point": "4",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "private",
+            "day": "sunday",
+            "Time": "20:00-23:00",
+            "Entry Point": "3",
+            "Exit Point": "1"
+        },
+        {
+            "vehicle type": "private",
+            "day": "wednesday",
+            "Time": "17:00-20:00",
+            "Entry Point": "1",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "private",
+            "day": "thursday",
+            "Time": "20:00-23:00",
+            "Entry Point": "1",
+            "Exit Point": "2"
+        },
+        {
+            "vehicle type": "private",
+            "day": "saturday",
+            "Time": "05:00-09:00",
+            "Entry Point": "5",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "truck",
+            "day": "sunday",
+            "Time": "17:00-20:00",
+            "Entry Point": "3",
+            "Exit Point": "2"
+        },
+        {
+            "vehicle type": "private",
+            "day": "thursday",
+            "Time": "23:00-02:00",
+            "Entry Point": "5",
+            "Exit Point": "3"
+        },
+        {
+            "vehicle type": "private",
+            "day": "friday",
+            "Time": "05:00-09:00",
+            "Entry Point": "3",
+            "Exit Point": "1"
+        },
+        {
+            "vehicle type": "private",
+            "day": "wednesday",
+            "Time": "12:00-14:00",
+            "Entry Point": "1",
+            "Exit Point": "5"
+        },
+        {
+            "vehicle type": "private",
+            "day": "wednesday",
+            "Time": "02:00-05:00",
+            "Entry Point": "4",
+            "Exit Point": "2"
+        }
+    ]
+}

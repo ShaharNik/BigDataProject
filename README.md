@@ -14,5 +14,5 @@
 
 <br><br>
 
-<img src="pic1.png">
+<img src="pic.png">
 
